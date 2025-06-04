@@ -296,15 +296,18 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
 
     bool        includeFWValues = factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassFixedWing || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassVTOL || factValueGrid.vehicleClass() == QGCMAVLink::VehicleClassAirship;
 
-    factValueGrid.setFontSize(FactValueGrid::LargeFontSize);
+    factValueGrid.setFontSize(FactValueGrid::SmallFontSize);
 
+    factValueGrid.appendColumn();
+    factValueGrid.appendColumn();
+    factValueGrid.appendColumn();
     factValueGrid.appendColumn();
     factValueGrid.appendColumn();
     factValueGrid.appendColumn();
     if (includeFWValues) {
         factValueGrid.appendColumn();
     }
-    factValueGrid.appendRow();
+    //factValueGrid.appendRow();
 
     int                 rowIndex    = 0;
     QmlObjectListModel* column      = factValueGrid.columns()->value<QmlObjectListModel*>(0);
@@ -315,6 +318,9 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
     value->setText(value->fact()->shortDescription());
     value->setShowUnits(true);
 
+    rowIndex    = 0;
+    column      = factValueGrid.columns()->value<QmlObjectListModel*>(1);
+
     value = column->value<InstrumentValueData*>(rowIndex++);
     value->setFact("Vehicle", "DistanceToHome");
     value->setIcon("bookmark copy 3.svg");
@@ -322,7 +328,7 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
     value->setShowUnits(true);
 
     rowIndex    = 0;
-    column      = factValueGrid.columns()->value<QmlObjectListModel*>(1);
+    column      = factValueGrid.columns()->value<QmlObjectListModel*>(2);
 
     value = column->value<InstrumentValueData*>(rowIndex++);
     value->setFact("Vehicle", "ClimbRate");
@@ -330,16 +336,36 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
     value->setText(value->fact()->shortDescription());
     value->setShowUnits(true);
 
+    rowIndex    = 0;
+    column      = factValueGrid.columns()->value<QmlObjectListModel*>(3);
+
     value = column->value<InstrumentValueData*>(rowIndex++);
     value->setFact("Vehicle", "GroundSpeed");
     value->setIcon("arrow-simple-right.svg");
     value->setText(value->fact()->shortDescription());
     value->setShowUnits(true);
 
+    rowIndex    = 0;
+    column      = factValueGrid.columns()->value<QmlObjectListModel*>(4);
+
+    value = column->value<InstrumentValueData*>(rowIndex++);
+    value->setFact("Vehicle", "FlightTime");
+    value->setIcon("timer.svg");
+    value->setText(value->fact()->shortDescription());
+    value->setShowUnits(false);
+
+    rowIndex    = 0;
+    column      = factValueGrid.columns()->value<QmlObjectListModel*>(5);
+
+    value = column->value<InstrumentValueData*>(rowIndex++);
+    value->setFact("Vehicle", "FlightDistance");
+    value->setIcon("travel-walk.svg");
+    value->setText(value->fact()->shortDescription());
+    value->setShowUnits(true);
 
     if (includeFWValues) {
         rowIndex    = 0;
-        column      = factValueGrid.columns()->value<QmlObjectListModel*>(2);
+        column      = factValueGrid.columns()->value<QmlObjectListModel*>(6);
 
         value = column->value<InstrumentValueData*>(rowIndex++);
         value->setFact("Vehicle", "AirSpeed");
@@ -352,20 +378,10 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
         value->setShowUnits(true);
     }
 
-    rowIndex    = 0;
-    column      = factValueGrid.columns()->value<QmlObjectListModel*>(includeFWValues ? 3 : 2);
+    // rowIndex    = 0;
+    // column      = factValueGrid.columns()->value<QmlObjectListModel*>(includeFWValues ? 5 : 4);
 
-    value = column->value<InstrumentValueData*>(rowIndex++);
-    value->setFact("Vehicle", "FlightTime");
-    value->setIcon("timer.svg");
-    value->setText(value->fact()->shortDescription());
-    value->setShowUnits(false);
 
-    value = column->value<InstrumentValueData*>(rowIndex++);
-    value->setFact("Vehicle", "FlightDistance");
-    value->setIcon("travel-walk.svg");
-    value->setText(value->fact()->shortDescription());
-    value->setShowUnits(true);
 }
 
 QQmlApplicationEngine* QGCCorePlugin::createQmlApplicationEngine(QObject* parent)

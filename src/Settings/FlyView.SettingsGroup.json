@@ -66,6 +66,12 @@
     "units":            "m",
     "default":     1000,
     "min":              1
+},
+{
+    "name":             "showEditTelemetryValue",
+    "shortDesc": "showEditTelemetryValue",
+    "type":             "bool",
+    "default":     false
 }
 ]
 }

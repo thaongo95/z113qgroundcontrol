@@ -18,6 +18,7 @@ import QGroundControl.FlightMap     1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.Palette       1.0
 
+
 ColumnLayout {
     id:         root
     spacing:    ScreenTools.defaultFontPixelHeight / 4
@@ -34,26 +35,26 @@ ColumnLayout {
         height:             _outerRadius * 2
         Layout.fillWidth:   true
         radius:             _outerRadius
-        color:              qgcPal.window
+        color:              "transparent"//qgcPal.window
 
         DeadMouseArea { anchors.fill: parent }
 
-        QGCAttitudeWidget {
-            id:                     attitude
-            anchors.leftMargin:     _topBottomMargin
-            anchors.left:           parent.left
-            size:                   _innerRadius * 2
-            vehicle:                globals.activeVehicle
-            anchors.verticalCenter: parent.verticalCenter
-        }
+        // QGCAttitudeWidget {
+        //     id:                     attitude
+        //     anchors.leftMargin:     _topBottomMargin
+        //     anchors.left:           parent.left
+        //     size:                   _innerRadius * 2
+        //     vehicle:                globals.activeVehicle
+        //     anchors.verticalCenter: parent.verticalCenter
+        // }
 
         QGCCompassWidget {
             id:                     compass
-            anchors.leftMargin:     _spacing
-            anchors.left:           attitude.right
+            anchors.topMargin:     _spacing
+            anchors.top:           attitude.right
             size:                   _innerRadius * 2
             vehicle:                globals.activeVehicle
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter:  parent.horizontalCenter
         }
     }
 

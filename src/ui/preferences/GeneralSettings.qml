@@ -183,6 +183,13 @@ Rectangle {
                                 property Fact _showDumbCameraControl: QGroundControl.settingsManager.flyViewSettings.showSimpleCameraControl
                             }
 
+                            FactCheckBox {
+                                text:       qsTr("Show edit telemetry value display")
+                                visible:    _showEditTelemetryValue.visible
+                                fact:       _showEditTelemetryValue
+
+                                property Fact _showEditTelemetryValue: QGroundControl.settingsManager.flyViewSettings.showEditTelemetryValue
+                            }
                             GridLayout {
                                 columns: 2
 
