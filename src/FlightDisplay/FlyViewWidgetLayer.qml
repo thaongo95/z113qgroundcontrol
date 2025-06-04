@@ -120,10 +120,13 @@ Item {
 
     FlyViewInstrumentPanel {
         id: instrumentPanel
-        anchors.margins: _toolsMargin
-        //anchors.topMargin: anchors.margins + SiYi.iconsHeight
-        anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.right: parent.right
+        // anchors.margins: _toolsMargin
+        // //anchors.topMargin: anchors.margins + SiYi.iconsHeight
+        // anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        // anchors.right: parent.right
+        anchors.bottom: telemetryPanel.top
+        anchors.bottomMargin: 10
+        anchors.horizontalCenter: telemetryPanel.horizontalCenter
         width: _rightPanelWidth
         spacing: _toolsMargin
         visible: SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
@@ -164,20 +167,21 @@ Item {
 
     Rectangle {
         id: zoomMultipleRectangle
-        anchors.bottom: telemetryPanel.top
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
         color: "white"
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         visible: false
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
         radius: 5
         QGCLabel {
             id: zoomMultipleLabel
             text: (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
             anchors.centerIn: parent
             color: "black"
-            font.pixelSize: 48
+            font.pixelSize: 28
 
             Timer {
                 id: visibleTimer
@@ -198,12 +202,13 @@ Item {
     }
 
     Rectangle {
-        id: resultRectangle
-        anchors.bottom: telemetryPanel.top
+        id: resultRectangle    
         width: resultLabel.width + resultLabel.width * 0.4
         height: resultLabel.height + resultLabel.height * 0.4
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         color: "white"
         visible: false
         radius: 5
@@ -211,7 +216,7 @@ Item {
             id: resultLabel
             anchors.centerIn: parent
             color: "black"
-            font.pixelSize: 48
+            font.pixelSize: 28
 
             Timer {
                 id: resultTimer
@@ -255,11 +260,12 @@ Item {
     // cho them hien thi quay video
     Rectangle {
         id: is_recording
-        anchors.bottom: telemetryPanel.top
         width: recordingLabel.width + recordingLabel.width * 0.4
         height: recordingLabel.height + recordingLabel.height * 0.4
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         color: "white"
         visible: false
         radius: 5
@@ -268,7 +274,7 @@ Item {
             id: recordingLabel
             anchors.centerIn: parent
             color: "red"
-            font.pixelSize: 48
+            font.pixelSize: 28
             text: getTime(is_recording.secondCount)
 
             function getTime(time){
@@ -278,7 +284,7 @@ Item {
                 function get_string(n){
                     return n>=10 ? n.toString() : '0' + n
                 }
-                return "Đang quay phim " + get_string(hours) + ":" + get_string(minutes) + ":" + get_string(seconds)
+                return "Ghi hình " + get_string(hours) + ":" + get_string(minutes) + ":" + get_string(seconds)
             }
 
             Timer {
@@ -312,72 +318,75 @@ Item {
     }
     TelemetryValuesBar {
         id: telemetryPanel
-        x: recalcXPosition()
+        // x: recalcXPosition()
         anchors.margins: _toolsMargin
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         visible: !SiYi.hideWidgets
 
         // States for custom layout support
-        states: [
-            State {
-                name: "bottom"
-                when: telemetryPanel.bottomMode
+        // states: [
+        //     State {
+        //         name: "bottom"
+        //         when: telemetryPanel.bottomMode
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: parent.bottom
-                    anchors.right: undefined
-                    anchors.verticalCenter: undefined
-                }
+        //         AnchorChanges {
+        //             target: telemetryPanel
+        //             anchors.top: undefined
+        //             anchors.bottom: parent.bottom
+        //             anchors.right: undefined
+        //             anchors.verticalCenter: undefined
+        //         }
 
-                PropertyChanges {
-                    target: telemetryPanel
-                    x: recalcXPosition()
-                }
-            },
+        //         PropertyChanges {
+        //             target: telemetryPanel
+        //             x: recalcXPosition()
+        //         }
+        //     }
+            // ,
 
-            State {
-                name: "right-video"
-                when: !telemetryPanel.bottomMode && photoVideoControl.visible
+            // State {
+            //     name: "right-video"
+            //     when: !telemetryPanel.bottomMode && photoVideoControl.visible
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: photoVideoControl.bottom
-                    anchors.bottom: undefined
-                    anchors.right: parent.right
-                    anchors.verticalCenter: undefined
-                }
-            },
+            //     AnchorChanges {
+            //         target: telemetryPanel
+            //         anchors.top: photoVideoControl.bottom
+            //         anchors.bottom: undefined
+            //         anchors.right: parent.right
+            //         anchors.verticalCenter: undefined
+            //     }
+            // },
 
-            State {
-                name: "right-novideo"
-                when: !telemetryPanel.bottomMode && !photoVideoControl.visible
+            // State {
+            //     name: "right-novideo"
+            //     when: !telemetryPanel.bottomMode && !photoVideoControl.visible
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: undefined
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-        ]
+            //     AnchorChanges {
+            //         target: telemetryPanel
+            //         anchors.top: undefined
+            //         anchors.bottom: undefined
+            //         anchors.right: parent.right
+            //         anchors.verticalCenter: parent.verticalCenter
+            //     }
+            // }
+        // ]
 
-        function recalcXPosition() {
-            // First try centered
-            var halfRootWidth = _root.width / 2
-            var halfPanelWidth = telemetryPanel.width / 2
-            var leftX = (halfRootWidth - halfPanelWidth) - _toolsMargin
-            var rightX = (halfRootWidth + halfPanelWidth) + _toolsMargin
-            if (leftX >= parentToolInsets.leftEdgeBottomInset
-                    || rightX <= parentToolInsets.rightEdgeBottomInset) {
-                // It will fit in the horizontalCenter
-                return halfRootWidth - halfPanelWidth
-            } else {
-                // Anchor to left edge
-                return parentToolInsets.leftEdgeBottomInset + _toolsMargin
-            }
-        }
+        // function recalcXPosition() {
+        //     // First try centered
+        //     var halfRootWidth = _root.width / 2
+        //     var halfPanelWidth = telemetryPanel.width / 2
+        //     var leftX = (halfRootWidth - halfPanelWidth) - _toolsMargin
+        //     var rightX = (halfRootWidth + halfPanelWidth) + _toolsMargin
+        //     if (leftX >= parentToolInsets.leftEdgeBottomInset
+        //             || rightX <= parentToolInsets.rightEdgeBottomInset) {
+        //         // It will fit in the horizontalCenter
+        //         return halfRootWidth - halfPanelWidth
+        //     } else {
+        //         // Anchor to left edge
+        //         return parentToolInsets.leftEdgeBottomInset + _toolsMargin
+        //     }
+        // }
     }
 
     //-- Virtual Joystick

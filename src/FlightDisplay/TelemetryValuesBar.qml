@@ -23,85 +23,100 @@ Rectangle {
     color:              qgcPal.window
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
-    property bool       bottomMode: true
+    //property bool       bottomMode: true
 
     DeadMouseArea { anchors.fill: parent }
 
-    ColumnLayout {
+    RowLayout {
         id:                 telemetryLayout
         anchors.margins:    _toolsMargin
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
 
-         RowLayout {
-            visible: mouseArea.containsMouse || valueArea.settingsUnlocked
+        //  RowLayout {
+        //     visible: mouseArea.containsMouse || valueArea.settingsUnlocked
 
-            QGCColoredImage {
-                source:             "/res/layout-bottom.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
-                visible:            !bottomMode
+        //     QGCColoredImage {
+        //         source:             "/res/layout-bottom.svg"
+        //         mipmap:             true
+        //         width:              ScreenTools.minTouchPixels * 0.75
+        //         height:             width
+        //         sourceSize.width:   width
+        //         color:              qgcPal.text
+        //         fillMode:           Image.PreserveAspectFit
+        //         visible:            !bottomMode
 
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  bottomMode = true
-                }
-            }
+        //         QGCMouseArea {
+        //             fillItem:   parent
+        //             onClicked:  bottomMode = true
+        //         }
+        //     }
 
-            QGCColoredImage {
-                source:             "/res/layout-right.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
-                visible:            bottomMode
+        //     QGCColoredImage {
+        //         source:             "/res/layout-right.svg"
+        //         mipmap:             true
+        //         width:              ScreenTools.minTouchPixels * 0.75
+        //         height:             width
+        //         sourceSize.width:   width
+        //         color:              qgcPal.text
+        //         fillMode:           Image.PreserveAspectFit
+        //         visible:            bottomMode
 
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  bottomMode = false
-                }
-            }
+        //         QGCMouseArea {
+        //             fillItem:   parent
+        //             onClicked:  bottomMode = false
+        //         }
+        //     }
 
-            QGCColoredImage {
-                source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
+        //     QGCColoredImage {
+        //         source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
+        //         mipmap:             true
+        //         width:              ScreenTools.minTouchPixels * 0.75
+        //         height:             width
+        //         sourceSize.width:   width
+        //         color:              qgcPal.text
+        //         fillMode:           Image.PreserveAspectFit
 
-                QGCMouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape:  Qt.PointingHandCursor
-                    onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
-                }
-            }
-        }
+        //         QGCMouseArea {
+        //             anchors.fill: parent
+        //             hoverEnabled: true
+        //             cursorShape:  Qt.PointingHandCursor
+        //             onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
+        //         }
+        //     }
+        // }
 
-        QGCMouseArea {
-            id:                         mouseArea
-            x:                          telemetryLayout.x
-            y:                          telemetryLayout.y
-            width:                      telemetryLayout.width
-            height:                     telemetryLayout.height
-            hoverEnabled:               true
-            propagateComposedEvents:    true
-        }
+        // QGCMouseArea {
+        //     id:                         mouseArea
+        //     x:                          telemetryLayout.x
+        //     y:                          telemetryLayout.y
+        //     width:                      telemetryLayout.width
+        //     height:                     telemetryLayout.height
+        //     hoverEnabled:               true
+        //     propagateComposedEvents:    true
+        // }
 
         HorizontalFactValueGrid {
             id:                     valueArea
             userSettingsGroup:      telemetryBarUserSettingsGroup
             defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
         }
-
+        QGCColoredImage {
+            source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
+            mipmap:             true
+            width:              ScreenTools.minTouchPixels * 0.4 //ScreenTools.minTouchPixels * 0.75
+            height:             width
+            sourceSize.width:   width
+            color:              qgcPal.text
+            fillMode:           Image.PreserveAspectFit
+            visible:            QGroundControl.settingsManager.flyViewSettings.showEditTelemetryValue.rawValue
+            QGCMouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
+            }
+        }
         GuidedActionConfirm {
             Layout.fillWidth:   true
             guidedController:   _guidedController
