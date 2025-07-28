@@ -124,9 +124,12 @@ Item {
         // //anchors.topMargin: anchors.margins + SiYi.iconsHeight
         // anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         // anchors.right: parent.right
-        anchors.bottom: telemetryPanel.top
-        anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        // anchors.bottom: telemetryPanel.top
+        // anchors.bottomMargin: 10
+        // anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: _toolsMargin
         width: _rightPanelWidth
         spacing: _toolsMargin
         visible: SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
@@ -165,22 +168,29 @@ Item {
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
 
+    QGCPalette{
+        id: qgcPal
+    }
+
     Rectangle {
         id: zoomMultipleRectangle
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
-        color: "white"
-        anchors.bottom: parent.bottom
+        color: qgcPal.toolbarBackground
+        // anchors.bottom: parent.bottom
+        // anchors.bottomMargin: 10
+        // anchors.right: parent.right
+        // anchors.rightMargin: 10
+        anchors.bottom: telemetryPanel.top
         anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.horizontalCenter: telemetryPanel.horizontalCenter
         visible: false
         radius: 5
         QGCLabel {
             id: zoomMultipleLabel
             text: (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
             anchors.centerIn: parent
-            color: "black"
+            color: qgcPal.text
             font.pixelSize: 28
 
             Timer {
@@ -205,17 +215,20 @@ Item {
         id: resultRectangle    
         width: resultLabel.width + resultLabel.width * 0.4
         height: resultLabel.height + resultLabel.height * 0.4
-        anchors.bottom: parent.bottom
+        // anchors.bottom: parent.bottom
+        // anchors.bottomMargin: 10
+        // anchors.right: parent.right
+        // anchors.rightMargin: 10
+        anchors.bottom: telemetryPanel.top
         anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        color: "white"
+        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        color: qgcPal.toolbarBackground
         visible: false
         radius: 5
         QGCLabel {
             id: resultLabel
             anchors.centerIn: parent
-            color: "black"
+            color: qgcPal.text
             font.pixelSize: 28
 
             Timer {
@@ -262,11 +275,14 @@ Item {
         id: is_recording
         width: recordingLabel.width + recordingLabel.width * 0.4
         height: recordingLabel.height + recordingLabel.height * 0.4
-        anchors.bottom: parent.bottom
+        // anchors.bottom: parent.bottom
+        // anchors.bottomMargin: 10
+        // anchors.right: parent.right
+        // anchors.rightMargin: 10
+        anchors.bottom: telemetryPanel.top
         anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        color: "white"
+        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        color: qgcPal.toolbarBackground
         visible: false
         radius: 5
         property int secondCount: 0

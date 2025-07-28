@@ -50,8 +50,8 @@ ColumnLayout {
 
         QGCCompassWidget {
             id:                     compass
-            anchors.topMargin:     _spacing
-            anchors.top:           attitude.right
+            //anchors.topMargin:     _spacing
+            //anchors.top:           attitude.right
             size:                   _innerRadius * 2
             vehicle:                globals.activeVehicle
             anchors.horizontalCenter:  parent.horizontalCenter

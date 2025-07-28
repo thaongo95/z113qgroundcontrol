@@ -19,16 +19,20 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
+import QGroundControl.FactSystem 1.0
 
 import SiYi.Object 1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
+
+
 ApplicationWindow {
     id:             mainWindow
     minimumWidth:   ScreenTools.isMobile ? Screen.width  : Math.min(ScreenTools.defaultFontPixelWidth * 100, Screen.width)
     minimumHeight:  ScreenTools.isMobile ? Screen.height : Math.min(ScreenTools.defaultFontPixelWidth * 50, Screen.height)
     visible:        true
+
 
     property SiYiCamera siYiCamera: SiYi.camera
 
@@ -132,6 +136,7 @@ ApplicationWindow {
         toolDrawer.toolSource   = ""
         flightView.visible      = false
         planView.visible        = false
+        welcomeView.visible     = false
         toolbar.currentToolbar  = currentToolbar
     }
 
@@ -146,6 +151,11 @@ ApplicationWindow {
     function showPlanView() {
         viewSwitch(toolbar.planViewToolbar)
         planView.visible = true
+    }
+
+    function showWelcomeView(){
+        viewSwitch(toolbar.flyViewToolbar)
+        welcomeView.visible = true
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
@@ -334,7 +344,7 @@ ApplicationWindow {
     header: MainToolBar {
         id:         toolbar
         height:     planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight*0.9
-        visible:    !QGroundControl.videoManager.fullScreen
+        visible:    !QGroundControl.videoManager.fullScreen&&!welcomeView.visible
     }
 
     footer: LogReplayStatusBar {
@@ -349,7 +359,6 @@ ApplicationWindow {
 
     Component {
         id: toolSelectDialogComponent
-
         QGCPopupDialog {
             id:         toolSelectDialog
             title:      qsTr("Select Tool")
@@ -361,6 +370,7 @@ ApplicationWindow {
             ColumnLayout {
                 width:  innerLayout.width + (_margins * 2)
                 height: innerLayout.height + (_margins * 2)
+
 
                 ColumnLayout {
                     id:             innerLayout
@@ -472,6 +482,7 @@ ApplicationWindow {
     FlyView {
         id:             flightView
         anchors.fill:   parent
+        visible: false
     }
 
     PlanView {
@@ -479,7 +490,747 @@ ApplicationWindow {
         anchors.fill:   parent
         visible:        false
     }
+    Popup {
+        id: linkPopup
+        width: parent.width*2/3
+        height: parent.height*2/3
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        anchors.centerIn: parent
+        LinkSettings{
+            anchors.fill: parent
+        }
+    }
+    function showGeneralPopup(){
+        generalPopup.open()
+    }
 
+    Popup {
+        id: generalPopup
+        width: parent.width*2/3
+        height: parent.height
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        anchors.centerIn: parent
+        GeneralSettings{
+            anchors.fill: parent
+        }
+
+    }
+    Rectangle{
+        id:      welcomeView
+        anchors.fill: parent
+        visible:  true
+        color: qgcPal.window //"lightblue"
+
+        property int r_size: 30
+        property int l_margin: 50
+        property int s_margin: 20
+        property real lighter_volume: 1.1
+        property Fact lang_fact: QGroundControl.settingsManager.appSettings.qLocaleLanguage
+        property Fact theme_fact: QGroundControl.settingsManager.appSettings.indoorPalette
+        Rectangle{
+            id: rightPanel
+            color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            anchors.right: parent.right
+            width: parent.width*3/7
+            Rectangle{
+                id: uavImage
+                width: parent.width/2
+                height: width*2/3
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: height
+                color: "transparent"
+                Image{
+                    source: "qrc:/resources/Z113/z6d_transparent.png"
+                    anchors.fill: parent
+                }
+                Rectangle{
+                    anchors.top: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.topMargin: welcomeView.s_margin
+                    height: parent.height/5
+                    width: height*3
+                    color: rightPanel.color
+                    // Timer{
+                    //     id: blink
+                    //     interval: 500
+                    //     repeat: true
+                    //     running: !QGroundControl.multiVehicleManager.activeVehicle
+                    //     onTriggered: {
+                    //         if (droneicon.color === rightPanel.color){
+                    //             droneicon.color = Qt.lighter("red", 1.2)
+                    //         }
+                    //         else {droneicon.color = rightPanel.color}
+                    //     }
+                    // }
+                    Text{
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 28
+                        text: "Z6D"
+                        color: qgcPal.text
+                        font.bold: true
+                        font.italic: true
+                    }
+                    Rectangle{
+                        id: droneicon
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: height
+                        color: rightPanel.color
+                        radius: height/2
+                        border.width: height/10
+                        border.color: QGroundControl.multiVehicleManager.activeVehicle ? "green" : Qt.lighter("red", 1.2)
+                        Image{
+                            anchors.centerIn: parent
+                            height: parent.height/2
+                            width: height
+                            source: "qrc:/resources/Z113/drone.png"
+                        }
+                    }
+
+                }
+            }
+            // Rectangle{
+            //     id: vehicleInfo
+            //     anchors.left: parent.left
+            //     anchors.leftMargin: welcomeView.l_margin
+            //     anchors.top: parent.top
+            //     anchors.topMargin:  welcomeView.s_margin
+            //     radius: welcomeView.r_size/2*3
+            //     color: Qt.lighter(welcomeView.color, 1.2)
+            //     height: linking.height*2/3
+            //     width: height*2
+            //     Image{
+            //         source: "qrc:/resources/Z113/droneInfo.png"
+            //         anchors.centerIn: parent
+            //     }
+            //     MouseArea{
+            //         anchors.fill: parent
+            //         onClicked: {
+            //             showPopupDialogFromSource("/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml")
+            //         }
+            //     }
+            // }
+            Rectangle{
+                id: unitsInfo
+                anchors.left: parent.left
+                anchors.leftMargin: welcomeView.l_margin
+                anchors.top: parent.top
+                anchors.topMargin:  welcomeView.s_margin
+                radius: welcomeView.r_size/2*3
+                color: qgcPal.button
+                height: linking.height*2/3
+                width: height*1.75
+                Image{
+                    source: "qrc:/resources/Z113/scalecolor.png"
+                    anchors.centerIn: parent
+                    height: parent.height*2/3
+                    width: height
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        showPopupDialogFromSource("/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml")
+                    }
+                }
+            }
+            Rectangle{
+                id: languageBt
+                anchors.left: unitsInfo.right
+                anchors.leftMargin: welcomeView.s_margin
+                anchors.top: parent.top
+                anchors.topMargin:  welcomeView.s_margin
+                radius: welcomeView.r_size/2*3
+                color: qgcPal.button
+                height: linking.height*2/3
+                width: height*1.75
+                Image{
+                    source: welcomeView.lang_fact.rawValue === 0 ? "qrc:/resources/Z113/flag.png" : "qrc:/resources/Z113/vietnam.png"
+                    anchors.centerIn: parent
+                    height: parent.height*2/3
+                    width: height
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: welcomeView.lang_fact.rawValue = (welcomeView.lang_fact.rawValue === 25) ? 0 : 25
+                }
+            }
+            Rectangle{
+                id: colorBt
+                anchors.left: languageBt.right
+                anchors.leftMargin: welcomeView.s_margin
+                anchors.top: parent.top
+                anchors.topMargin:  welcomeView.s_margin
+                radius: welcomeView.r_size/2*3
+                color: qgcPal.button
+                height: linking.height*2/3
+                width: height*1.75
+                Image{
+                    source: welcomeView.theme_fact.rawValue ? "qrc:/resources/Z113/night-mode.png" : "qrc:/resources/Z113/light-mode.png"
+                    anchors.centerIn: parent
+                    height: parent.height*2/3
+                    width: height
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: welcomeView.theme_fact.rawValue = (welcomeView.theme_fact.rawValue === 0) ? 1 : 0
+                }
+            }
+            Rectangle{
+                id: linking
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: enterFlightView.top
+                anchors.bottomMargin: enterFlightView.height
+                width: enterFlightView.width/2
+                height: width/4
+                radius: welcomeView.r_size/2
+                color: qgcPal.button
+                Text {
+                    text: QGroundControl.multiVehicleManager.activeVehicle ? (welcomeView.lang_fact.rawValue === 25 ? qsTr("ĐÃ KẾT NỐI") : qsTr("LINKED"))
+                                                                           : (welcomeView.lang_fact.rawValue === 25 ? qsTr("KẾT NỐI")    : qsTr("LINKING"))
+                    anchors.centerIn: parent
+                    font.pixelSize: 36
+                    font.bold: QGroundControl.multiVehicleManager.activeVehicle  ? true : false
+                    color:  QGroundControl.multiVehicleManager.activeVehicle ? "green" : qgcPal.text
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    enabled: !QGroundControl.multiVehicleManager.activeVehicle
+                    onClicked: {
+                        linkPopup.open()
+                    }
+                }
+            }
+            Image{
+                id: settingGear
+                anchors.top: parent.top
+                anchors.topMargin: welcomeView.s_margin
+                anchors.right: parent.right
+                anchors.rightMargin: welcomeView.l_margin
+                width: parent.width/15
+                height: width
+                source: "qrc:/resources/Z113/settings.png"
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        generalPopup.open()
+                    }
+                }
+            }
+
+            Rectangle{
+                id: enterFlightView
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.left: parent.left
+                anchors.margins: welcomeView.l_margin
+                height: width/6
+                radius: welcomeView.r_size
+                color: "#00bfff"
+                Text {
+                    text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Điều Khiển Bay") : qsTr("Enter Flight View")
+                    anchors.centerIn: parent
+                    font.pixelSize: 42
+                    color: "white"
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        showFlyView()
+                    }
+                }
+            }
+        }
+
+
+        Rectangle{
+            id: swipeField
+            color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: rightPanel.left
+            anchors.margins: welcomeView.l_margin
+            height: parent.height*5/9
+            radius: welcomeView.r_size
+            SwipeView {
+                id: swipeView
+                anchors.fill: parent
+                currentIndex: 0
+                interactive: true
+                clip: true
+                Page {
+                    title: "Page 1"
+                    Image{
+                        anchors.fill: parent
+                        source: "qrc:/resources/Z113/UAV-50.jpg"
+                        Text{
+                            id: name1
+                            anchors.left: parent.left
+                            anchors.top: parent.verticalCenter
+                            anchors.leftMargin: welcomeView.l_margin
+                            text: "UAV-50"
+                            font.pixelSize: 64
+                            font.bold: true
+                            color: "white"
+                        }
+                        Text{
+                            id: info1
+                            anchors.left: parent.left
+                            anchors.top: name1.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.s_margin
+                            text: "Firefighting UAV"
+                            font.pixelSize: 28
+                            font.italic: true
+                            color: "white"
+                        }
+                        Text{
+                            id: mainFeature1
+                            anchors.left: parent.left
+                            anchors.top: info1.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.l_margin
+                            text: "+ FIRE-EXTINGUISHER LAUNCHERS " + "\n" + "+ 04 REPLACEABLE MODULES"
+                            font.pixelSize: 36
+                            color: "white"
+                        }
+                        Rectangle{
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: welcomeView.s_margin
+                            anchors.bottomMargin: welcomeView.s_margin
+                            height: welcomeView.l_margin*3/2
+                            width: height*3
+                            radius: height/3
+                            color: "transparent"
+                            border.color: "white"
+                            border.width: 3
+                            Text{
+                                anchors.centerIn: parent
+                                text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Chi tiết") : "LEARN MORE"
+                                font.pixelSize: welcomeView.lang_fact.rawValue === 25 ? 36 : 28
+                                color: "white"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: Qt.openUrlExternally("https://z113.vn/vi/uav")
+                            }
+                        }
+                    }
+                }
+                Page {
+                    title: "Page 2"
+                    Image{
+                        anchors.fill: parent
+                        source: "qrc:/resources/Z113/UAV-Z6D.jpg"
+                        Text{
+                            id: name2
+                            anchors.left: parent.left
+                            anchors.top: parent.verticalCenter
+                            anchors.leftMargin: welcomeView.l_margin
+                            text: "UAV-Z6D"
+                            font.pixelSize: 64
+                            font.bold: true
+                            color: "white"
+                        }
+                        Text{
+                            id: info2
+                            anchors.left: parent.left
+                            anchors.top: name2.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.s_margin
+                            text: "Surveillance UAV"
+                            font.pixelSize: 28
+                            font.italic: true
+                            color: "white"
+                        }
+                        Text{
+                            id: mainFeature2
+                            anchors.left: parent.left
+                            anchors.top: info2.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.l_margin
+                            text: "+ 4K RESOLUTION " + "\n" + "+ SURVEILLANCE CAMERA"
+                            font.pixelSize: 36
+                            color: "white"
+                        }
+                        Rectangle{
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: welcomeView.s_margin
+                            anchors.bottomMargin: welcomeView.s_margin
+                            height: welcomeView.l_margin*3/2
+                            width: height*3
+                            radius: height/3
+                            color: "transparent"
+                            border.color: "white"
+                            border.width: 3
+                            Text{
+                                anchors.centerIn: parent
+                                text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Chi tiết") : "LEARN MORE"
+                                font.pixelSize: welcomeView.lang_fact.rawValue === 25 ? 36 : 28
+                                color: "white"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: Qt.openUrlExternally("https://z113.vn/vi/uav")
+                            }
+                        }
+                    }
+                }
+                Page {
+                    title: "Page 3"
+                    Image{
+                        anchors.fill: parent
+                        source: "qrc:/resources/Z113/UAV-COMBAT.jpg"
+                        Text{
+                            id: name3
+                            anchors.left: parent.left
+                            anchors.top: parent.verticalCenter
+                            anchors.leftMargin: welcomeView.l_margin
+                            text: "UCAV-Z113"
+                            font.pixelSize: 64
+                            font.bold: true
+                            color: "white"
+                        }
+                        Text{
+                            id: info3
+                            anchors.left: parent.left
+                            anchors.top: name3.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.s_margin
+                            text: "Combat UAV"
+                            font.pixelSize: 28
+                            font.italic: true
+                            color: "white"
+                        }
+                        Text{
+                            id: mainFeature3
+                            anchors.left: parent.left
+                            anchors.top: info3.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.l_margin
+                            text: "+ ASSAULT UAV" + "\n" + "+ BOMBER"
+                            font.pixelSize: 36
+                            color: "white"
+                        }
+                        Rectangle{
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: welcomeView.s_margin
+                            anchors.bottomMargin: welcomeView.s_margin
+                            height: welcomeView.l_margin*3/2
+                            width: height*3
+                            radius: height/3
+                            color: "transparent"
+                            border.color: "white"
+                            border.width: 3
+                            Text{
+                                anchors.centerIn: parent
+                                text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Chi tiết") : "LEARN MORE"
+                                font.pixelSize: welcomeView.lang_fact.rawValue === 25 ? 36 : 28
+                                color: "white"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: Qt.openUrlExternally("https://z113.vn/vi/uav")
+                            }
+                        }
+                    }
+                }
+                Page {
+                    title: "Page 4"
+                    Image{
+                        anchors.fill: parent
+                        source: "qrc:/resources/Z113/UAV-FPV.jpg"
+                        Text{
+                            id: name4
+                            anchors.left: parent.left
+                            anchors.top: parent.verticalCenter
+                            anchors.leftMargin: welcomeView.l_margin
+                            text: "FPV DRONE"
+                            font.pixelSize: 64
+                            font.bold: true
+                            color: "white"
+                        }
+                        Text{
+                            id: info4
+                            anchors.left: parent.left
+                            anchors.top: name4.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.s_margin
+                            text: "Loitering munition FPV"
+                            font.pixelSize: 28
+                            font.italic: true
+                            color: "white"
+                        }
+                        Text{
+                            id: mainFeature4
+                            anchors.left: parent.left
+                            anchors.top: info4.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.l_margin
+                            text: "+ LOITERING MUNITION " + "\n" + "+ FIRST-PERSON VIEW CONTROL"
+                            font.pixelSize: 36
+                            color: "white"
+                        }
+                        Rectangle{
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: welcomeView.s_margin
+                            anchors.bottomMargin: welcomeView.s_margin
+                            height: welcomeView.l_margin*3/2
+                            width: height*3
+                            radius: height/3
+                            color: "transparent"
+                            border.color: "white"
+                            border.width: 3
+                            Text{
+                                anchors.centerIn: parent
+                                text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Chi tiết") : "LEARN MORE"
+                                font.pixelSize: welcomeView.lang_fact.rawValue === 25 ? 36 : 28
+                                color: "white"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: Qt.openUrlExternally("https://z113.vn/vi/uav")
+                            }
+                        }
+                    }
+                }
+                Page {
+                    title: "Page 5"
+                    Image{
+                        anchors.fill: parent
+                        source: "qrc:/resources/Z113/UAV-100AI.jpg"
+                        Text{
+                            id: name5
+                            anchors.left: parent.left
+                            anchors.top: parent.verticalCenter
+                            anchors.leftMargin: welcomeView.l_margin
+                            text: "UAV-100AI"
+                            font.pixelSize: 64
+                            font.bold: true
+                            color: "white"
+                        }
+                        Text{
+                            id: info5
+                            anchors.left: parent.left
+                            anchors.top: name5.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.s_margin
+                            text: "Target tracking UAV"
+                            font.pixelSize: 28
+                            font.italic: true
+                            color: "white"
+                        }
+                        Text{
+                            id: mainFeature5
+                            anchors.left: parent.left
+                            anchors.top: info5.bottom
+                            anchors.leftMargin: welcomeView.l_margin
+                            anchors.topMargin: welcomeView.l_margin
+                            text: "+ AI-POWERED TARGET TRACKING " + "\n" + "+ SURVEILLANCE CAMERA"
+                            font.pixelSize: 36
+                            color: "white"
+                        }
+                        Rectangle{
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            anchors.rightMargin: welcomeView.s_margin
+                            anchors.bottomMargin: welcomeView.s_margin
+                            height: welcomeView.l_margin*3/2
+                            width: height*3
+                            radius: height/3
+                            color: "transparent"
+                            border.color: "white"
+                            border.width: 3
+                            Text{
+                                anchors.centerIn: parent
+                                text: welcomeView.lang_fact.rawValue === 25 ? qsTr("Chi tiết") : "LEARN MORE"
+                                font.pixelSize: welcomeView.lang_fact.rawValue === 25 ? 36 : 28
+                                color: "white"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: Qt.openUrlExternally("https://z113.vn/vi/uav")
+                            }
+                        }
+                    }
+                }
+                Timer {
+                    interval: 3000
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        swipeView.currentIndex = (swipeView.currentIndex + 1) % swipeView.count;
+                    }
+                }
+            }
+            PageIndicator {
+                id: indicator
+                count: swipeView.count
+                currentIndex: swipeView.currentIndex
+                anchors.bottom: swipeView.bottom
+                anchors.horizontalCenter: swipeView.horizontalCenter
+            }
+        }
+        Rectangle{
+            id: infoField
+            anchors.bottom: swipeField.top
+            anchors.left: parent.left
+            anchors.right: rightPanel.left
+            anchors.margins: welcomeView.l_margin
+            height: parent.height/4
+            color: welcomeView.color
+            radius: welcomeView.r_size
+            property int box_width: (infoField.width-welcomeView.s_margin)/2
+            property int box_height: (infoField.height-welcomeView.s_margin)/2
+            Rectangle{
+                id: manualBt
+                color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+                height:infoField.box_height;  width: infoField.box_width
+                anchors.top: parent.top
+                anchors.left: parent.left
+                radius: welcomeView.r_size
+                Text{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: welcomeView.l_margin
+                    text: "Z113"
+                    font.pixelSize: 36
+                    color: qgcPal.text
+                }
+                Image{
+                    source: "/res/QGCLogoFull"
+                    height: parent.height/2
+                    width: height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: welcomeView.s_margin
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: Qt.openUrlExternally("https://z113.vn/vi/gioi-thieu")
+                }
+
+            }
+            Rectangle{
+                id: albumsBt
+                color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+                radius: welcomeView.r_size
+                height:infoField.box_height;  width: infoField.box_width
+                anchors.top: parent.top
+                anchors.right: parent.right
+                Text{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: welcomeView.l_margin
+                    text: welcomeView.lang_fact.rawValue === 25 ? "Thư viện" : "Albums"
+                    font.pixelSize: 36
+                    color: qgcPal.text
+                }
+                Image{
+                    source: "qrc:/resources/Z113/albums.png"
+                    height: parent.height/2
+                    width: height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: welcomeView.s_margin
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: Qt.openUrlExternally("http://192.168.144.25:82/photo/")
+                }
+            }
+
+            Rectangle{
+                id: logoBt
+                color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+                radius: welcomeView.r_size
+                height:infoField.box_height;  width: infoField.box_width
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                Text{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: welcomeView.l_margin
+                    text: welcomeView.lang_fact.rawValue === 25 ? "Trợ giúp" : "Help"
+                    font.pixelSize: 36
+                    color: qgcPal.text
+                }
+                Image{
+                    source: "qrc:/resources/Z113/chat.png"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: welcomeView.s_margin
+                    height: parent.height/2
+                    width: height
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        let m_xmlHttpRequest = new XMLHttpRequest();
+                        m_xmlHttpRequest.open("GET", "qrc:/resources/Z113/manual.txt")
+                        m_xmlHttpRequest.onreadystatechange = function(){
+                            if (m_xmlHttpRequest.readyState === XMLHttpRequest.DONE){
+                                showMessageDialog("Xử lý sự cố", m_xmlHttpRequest.responseText);
+                            }
+                        }
+                        m_xmlHttpRequest.send();
+
+                    }
+                }
+
+            }
+            Rectangle{
+                id: safetyBt
+                color: Qt.lighter(welcomeView.color, welcomeView.lighter_volume)
+                radius: welcomeView.r_size
+                height:infoField.box_height;  width: infoField.box_width
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                Text{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: welcomeView.l_margin
+                    text: welcomeView.lang_fact.rawValue === 25 ? "Phân tích" : "Analyze"
+                    font.pixelSize: 36
+                    color: qgcPal.text
+                }
+                Image{
+                    source: "qrc:/resources/Z113/safety.png"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: welcomeView.s_margin
+                    height: parent.height/2
+                    width: height
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: showAnalyzeTool() /*{
+                        let m_xmlHttpRequest = new XMLHttpRequest();
+                        m_xmlHttpRequest.open("GET", "qrc:/resources/Z113/safety.txt")
+                        m_xmlHttpRequest.onreadystatechange = function(){
+                            if (m_xmlHttpRequest.readyState === XMLHttpRequest.DONE){
+                                showMessageDialog("Các quy tắc an toàn", m_xmlHttpRequest.responseText);
+                            }
+                        }
+                        m_xmlHttpRequest.send();
+
+                    }*/
+                }
+            }
+        }
+    }
     Drawer {
         id:             toolDrawer
         width:          mainWindow.width

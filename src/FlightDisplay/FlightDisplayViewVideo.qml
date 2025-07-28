@@ -41,6 +41,10 @@ Item {
     Rectangle {
         id:             noVideo
         anchors.fill:   parent
+        Image {
+            anchors.fill: parent
+            source: "qrc:/resources/Z113/anh5.jpg"
+        }
         color:          Qt.rgba(0,0,0,0.75)
         visible:        !(QGroundControl.videoManager.decoding)
         QGCLabel {

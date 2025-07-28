@@ -7157,7 +7157,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="444"/>
         <source>Miscellaneous</source>
-        <translation>Phần bổ sung</translation>
+        <translation>Cài đặt bổ sung</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="468"/>
@@ -17223,42 +17223,42 @@ Confirm change?</translation>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="21"/>
         <source>Measurement Units</source>
-        <translation>Measurement Units</translation>
+        <translation>Đơn vị đo luờng</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
         <source>Horizontal Distance</source>
-        <translation>Horizontal Distance</translation>
+        <translation>Khoảng cách ngang</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
         <source>Vertical Distance</source>
-        <translation>Vertical Distance</translation>
+        <translation>Khoảng cách dọc</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
         <source>Area</source>
-        <translation>Area</translation>
+        <translation>Diện tích</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
         <source>Speed</source>
-        <translation>Speed</translation>
+        <translation>Tốc độ</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
         <source>Temperature</source>
-        <translation>Temperature</translation>
+        <translation>Nhiệt độ</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="64"/>
         <source>Choose the measurement units you want to use. You can also change it later in General Settings.</source>
-        <translation>Choose the measurement units you want to use. You can also change it later in General Settings.</translation>
+        <translation>Chọn đơn vị đo lường mà bạn muốn sử dụng. Bạn cũng có thể thay đổi chúng trong phần cài đặt.</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="84"/>
         <source>System of units</source>
-        <translation>System of units</translation>
+        <translation>Đơn vị của hệ thống</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="97"/>

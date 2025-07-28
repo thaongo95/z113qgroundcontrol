@@ -1,0 +1,24 @@
+   1. Lỗi động cơ 
+   Nếu một hoặc nhiều động cơ bị hỏng trong khi bay, máy bay sẽ tính toán lực đẩy còn lại theo các yếu tố như tình trạng của hệ thống đẩy, trọng lượng máy bay và môi trường bay. Hai khả năng các tình huống có thể xảy ra:
+   - Lực đẩy còn lại là đủ: Máy bay sẽ tiếp tục bau trong điều kiện ổn định với lực đẩy còn lại.
+   - Lực đẩy còn lại không đủ: Máy bay sẽ quay tròn và hạ xuống.
+   Khi xảy ra hiện tượng trên, người điều khiển nên hạ cánh máy bay bằng tay và kiểm tra, sửa chữa máy bay ngay lập tức
+   2. Sự cố cháy nổ
+   Sẽ có tín hiệu cảnh báo trong ứng dụng và hệ thống điều khiển bay sẽ giảm công suất của máy bay khi nhiệt độ pin quá cao. Pin sẽ bị vô hiệu hóa nếu sử dụng vượt quá ngưỡng nhiệt độ trong khi bay và sẽ không thể sử dụng lại sau khi hạ cánh.
+   Thực hiện các hướng dẫn sau khi pin máy bay bốc cháy:
+   - Nếu pin bắt lửa khi đang sạc pin bằng trạm sạc hoặc máy phát điện, hãy đảm bảo an toàn tuyệt đối cho bản thân, tắt nguồn trạm sạc hoặc máy phát điện ngay lập tức và ngắt kết nối pin khỏi thiết bị sạc. Nếu pin bắt lửa khi đang lắp trên máy bay, hãy đảm bảo an toàn tuyệt đối cho bản thân và ngắt kết nối pin khỏi máy bay ngay lập tức.
+   - Di chuyển các vật liệu dễ cháy xung quanh pin ra khỏi vị trí an toàn, xa hơn 5m.
+   - Nếu đám cháy nhỏ, hãy sử dụng các vật liệu như cát để che vị trí cháy và đổ nước lạnh để làm mát pin cho đến khi không còn khói. Sử dụng các công cụ bảo vệ để tránh tiếp xúc với pin, di chuyển pin đến một thùng chứa đủ nước để ngập hoàn toàn pin và thêm một lượng muối thích hợp để giúp xả hoàn toàn pin. Để thùng chứa ở nơi mát mẻ trong hơn 72 giờ và lấy pin ra và vứt bỏ.
+   - Nếu đám cháy lớn, hãy kiểm tra lại xem xung quanh đám cháy có vật liệu dễ cháy không, kéo dài khoảng cách an toàn lên hơn 10m và sơ tán mọi người xung quanh. Đợi đến khi pin cháy hết và đám cháy được dập tắt để tránh bất kỳ tai nạn nào khác xảy ra.
+   3 Lỗi mất kết nối
+   Máy bay hỗ trợ tính năng Failsafe RTH (Return to Home), đưa máy bay trở về điểm xuất phát cuối cùng được ghi nhân. Điểm xuất phát là vị trí đầu tiên mà máy bay nhận được tín hiệu GNSS mạnh. Máy bay khi mất tín hiệu điều khiển sẽ lỡ lửng trên không hoặc chuyển sang chế độ RTH, Cách xử lý khi mất tín hiệu của máy bay được thiết lập trong ứng dụng. Tính năng Failsafe RTH sẽ chỉ khả dụng nếu RTH được thiết lập.
+   Failsafe RTH được tự động kích hoặt nếu tín hiệu điều khiển từ xa bị mất trong hơn ba giây, với điều kiện là điểm xuất phát đã được ghi lại thành công, tín hiệu GNSS đủ mạnh. RTH vẫn tiếp tục khi tín hiệu điều khiển từ xa được phục hồi, và người điều khiển có thể thấy tín hiệu điều khiển bằng điều khiển từ xa. Khi đó, người điều khiển có thể hủy tính năng RTH và lấy lại quyền kiểm soát máy bay.
+   Chú ý: Máy bay sẽ không chuyển chế độ RTH khi kích hoạt RTH ở khoảng cách có bán kính 3m tính từ điểm xuất phát. Máy bay không thể trở về điểm xuất phát khi tín hiệu GNSS yếu hoặc không khả dụng
+   4 Mất hệ thống dẫn đường
+   Nếu tín hiệu GNSS không khả dụng, máy bay sẽ chuyển sang chế độ giữ độ cao Attitude để ổn định trang thái và cảnh báo về ứng dụng điều khiển để người điều khiển bay thận trọng và hạ cánh càng sớm càng tốt.
+   5. Lỗi bộ điều khiển cầm tay
+Sự cố ở Bộ điều khiển cầm tay chủ yếu bao gồm 2 tính huống sau:
+   Mất tín hiệu điều khiển: Máy bay sẽ vào chế độ Failsafe RTH nếu tính năng này được bật trong ứng dụng. Cách xử lý của máy bay cũng có thể được thiết lập để lơ lửng cho đến khi máy bay hạ cánh với mức pin thấp hoặc hạ cánh trực tiếp. 
+    Ứng dụng bị sập trong quá trình vận hành tự động trong khi tín hiệu điều khiển bình thường: thoát khỏi quá trình vận hành từ động bằng cách di chuyển nhẹ cần điều khiển và điều khiển máy bay thủ công hoặc đợi máy bay tự hạ cánh khi mức pin thấp.
+   6. Mất dấu máy bay
+   Dữ liệu từ xa của máy bay sẽ được hiển thị trên màn hình của Bộ điều khiển cầm tay trong quá trình bay. Nếu máy bay mất dấu trong khi đang hoạt động, người điều khiển có thể tìm kiếm máy bay theo vị trí của máy bay và bộ điều khiển từ xa được hiển thị trên bản đồ trong ứng dụng. Nếu tín hiệu GNSS của máy bay bị mất sau khi máy bay mất dấu thì vị trí máy bay sẽ không được hiển thị trên bản đồ trong ứng dụng. Người điều khiển phải ước tính vị trí của máy bay dựa vào vị trí cuối cùng, tốc độ bay và hướng bay trước khi mất tín hiệu GNSS.

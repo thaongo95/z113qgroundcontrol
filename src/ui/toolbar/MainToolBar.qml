@@ -34,7 +34,7 @@ Rectangle {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
-    property color  _mainStatusBGColor:    "#fa8072" //qgcPal.brandingPurple
+    property color  _mainStatusBGColor:    "#4682b4" //qgcPal.brandingPurple
 
     property SiYiCamera camera: SiYi.camera
     property SiYiTransmitter transmitter: SiYi.transmitter
@@ -71,17 +71,26 @@ Rectangle {
         spacing:                ScreenTools.defaultFontPixelWidth / 2
 
         QGCToolBarButton {
+            id:                     homePageBt
+            Layout.preferredHeight: viewButtonRow.height
+            icon.source:            "qrc:/resources/Z113/home-page.png"
+            logo:                   true
+            visible:                currentToolbar === flyViewToolbar
+            onClicked:              mainWindow.showWelcomeView()
+        }
+        QGCToolBarButton {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
+            icon.source:            "qrc:/resources/Z113/settings.png"           //  "/res/QGCLogoFull"
             logo:                   true
-            onClicked:              mainWindow.showSettingsTool() //mainWindow.showToolSelectDialog()
+            visible: currentToolbar === planViewToolbar
+            onClicked:              mainWindow.showGeneralPopup()  //mainWindow.showSettingsTool() //mainWindow.showToolSelectDialog()
         }
-
         MainStatusIndicator {
             Layout.preferredHeight: viewButtonRow.height
             visible:                currentToolbar === flyViewToolbar
         }
+
 
         QGCButton {
             id:                 disconnectButton
@@ -112,6 +121,7 @@ Rectangle {
                                     (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
         }
     }
+
 
     //-------------------------------------------------------------------------
     //-- Branding Logo

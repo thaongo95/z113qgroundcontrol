@@ -77,7 +77,7 @@ RowLayout {
                     }
                 }
             } else {
-                _mainStatusBGColor = "#fa8072" //qgcPal.brandingPurple
+                _mainStatusBGColor = "#4682b4" //qgcPal.brandingPurple
                 return mainStatusLabel._disconnectedText
             }
         }
