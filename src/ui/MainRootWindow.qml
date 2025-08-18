@@ -1202,7 +1202,7 @@ ApplicationWindow {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: welcomeView.l_margin
-                    text: welcomeView.lang_fact.rawValue === 25 ? "Phân tích" : "Analyze"
+                    text: welcomeView.lang_fact.rawValue === 25 ? "An toàn" : "Safety"
                     font.pixelSize: 36
                     color: qgcPal.text
                 }
@@ -1216,7 +1216,7 @@ ApplicationWindow {
                 }
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: showAnalyzeTool() /*{
+                    onClicked: {
                         let m_xmlHttpRequest = new XMLHttpRequest();
                         m_xmlHttpRequest.open("GET", "qrc:/resources/Z113/safety.txt")
                         m_xmlHttpRequest.onreadystatechange = function(){
@@ -1226,7 +1226,7 @@ ApplicationWindow {
                         }
                         m_xmlHttpRequest.send();
 
-                    }*/
+                    }
                 }
             }
         }

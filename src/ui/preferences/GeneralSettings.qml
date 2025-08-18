@@ -267,7 +267,7 @@ Rectangle {
         QGCFlickable{
             clip: true
             anchors.fill:  parent
-            contentHeight:      videoStreamColumn.height
+            contentHeight:      videoStreamColumn.height*1.1
             contentWidth:       videoStreamColumn.width
             ColumnLayout{
                 id:                         videoStreamColumn
@@ -280,7 +280,7 @@ Rectangle {
                 }
                 Rectangle{
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: videoGrid.height + _margins*2
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     visible:                videoStreamLabel.visible
                     Layout.fillWidth:       true
@@ -424,7 +424,7 @@ Rectangle {
         QGCFlickable {
             clip:               true
             anchors.fill:       parent
-            contentHeight:      settingsColumn.height
+            contentHeight:      settingsColumn.height*1.1
             contentWidth:       settingsColumn.width
             ColumnLayout {
                id:                         settingsColumn
@@ -438,7 +438,7 @@ Rectangle {
                }
                 Rectangle {
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: flyViewCol.height + _margins*2
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     visible:                flyViewSectionLabel.visible
                     Layout.fillWidth:       true
@@ -605,7 +605,7 @@ Rectangle {
                 }
                 Rectangle {
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: planViewCol.height + _margins*2
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     visible:                planViewSectionLabel.visible
                     Layout.fillWidth:       true
@@ -668,7 +668,7 @@ Rectangle {
                 }
                 Rectangle {
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: unitsGrid.height + _margins*2
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     visible:                unitsSectionLabel.visible
                     Layout.fillWidth:       true
@@ -704,7 +704,7 @@ Rectangle {
         QGCFlickable {
             clip:               true
             anchors.fill:       parent
-            contentHeight:      miscSectionColumn.height
+            contentHeight:      miscSectionColumn.height*1.1
             contentWidth:       miscSectionColumn.width
             ColumnLayout {
                 id:                        miscSectionColumn
@@ -717,7 +717,7 @@ Rectangle {
                 }
                 Rectangle {
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: comboGridItem.height +  miscColItem.height + _margins*4
                     Layout.fillWidth:       true
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     visible:                miscSectionLabel.visible
@@ -971,7 +971,7 @@ Rectangle {
                 Rectangle {
                     id:                     telemetryRect
                     width: panelLoader.width
-                    height: panelLoader.height
+                    height: loggingCol.height + _margins*2
                     color:                  Qt.lighter(qgcPal.toolbarBackground, 1.2)
                     Layout.fillWidth:       true
                     visible:                promptSaveLog._telemetrySave.visible || logIfNotArmed._telemetrySaveNotArmed.visible || promptSaveCsv._saveCsvTelemetry.visible
