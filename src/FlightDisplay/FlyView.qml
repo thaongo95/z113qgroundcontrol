@@ -56,7 +56,7 @@ Item {
     property real _toolsMargin: ScreenTools.defaultFontPixelWidth * 0.75
     property rect _centerViewport: Qt.rect(0, 0, width, height)
     property real _rightPanelWidth: ScreenTools.defaultFontPixelWidth *30
-    property var _mapControl: mapControl
+    //property var _mapControl: mapControl
 
     property real _fullItemZorder: 0
     property real _pipItemZorder: QGroundControl.zOrderWidgets
@@ -80,10 +80,10 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.right: guidedAltSlider.visible ? guidedAltSlider.left : parent.right
+        anchors.right: parent.right // guidedAltSlider.visible ? guidedAltSlider.left : parent.right
         z: _fullItemZorder + 1
         parentToolInsets: _toolInsets
-        mapControl: _mapControl
+        //mapControl: _mapControl
         visible: !QGroundControl.videoManager.fullScreen
     }
 
@@ -92,7 +92,7 @@ Item {
         anchors.fill: widgetLayer
         z: _fullItemZorder + 2
         parentToolInsets: widgetLayer.totalToolInsets
-        mapControl: _mapControl
+        //mapControl: _mapControl
         visible: !QGroundControl.videoManager.fullScreen
     }
 
@@ -104,7 +104,7 @@ Item {
     }
 
 
-    /*GuidedActionConfirm {
+    GuidedActionConfirm {
         id:                         guidedActionConfirm
         anchors.margins:            _margins
         anchors.bottom:             parent.bottom
@@ -112,7 +112,8 @@ Item {
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
         altitudeSlider:             _guidedAltSlider
-    }*/
+    }
+
     GuidedActionList {
         id: guidedActionList
         anchors.margins: _margins
@@ -136,17 +137,18 @@ Item {
         visible: false
     }
 
-    FlyViewMap {
-        id: mapControl
-        planMasterController: _planController
-        rightPanelWidth: ScreenTools.defaultFontPixelHeight * 9
-        pipMode: !_mainWindowIsMap
-        toolInsets: customOverlay.totalToolInsets
-        mapName: "FlightDisplayView"
-    }
+    // FlyViewMap {
+    //     id: mapControl
+    //     planMasterController: _planController
+    //     rightPanelWidth: ScreenTools.defaultFontPixelHeight * 9
+    //     pipMode: !_mainWindowIsMap
+    //     toolInsets: customOverlay.totalToolInsets
+    //     mapName: "FlightDisplayView"
+    // }
 
     FlyViewVideo {
         id: videoControl
+        anchors.fill: parent
         //iconLeftMargin: widgetLayer.iconLeftMargin
     }
 
@@ -156,12 +158,12 @@ Item {
         anchors.bottom: parent.bottom
         anchors.margins: _toolsMargin
         item1IsFullSettingsKey: "MainFlyWindowIsMap"
-        item1: mapControl
+        item1: videoControl //mapControl
         item2: QGroundControl.videoManager.hasVideo ? videoControl : null
         fullZOrder: _fullItemZorder
         pipZOrder: _pipItemZorder
-        show: !QGroundControl.videoManager.fullScreen
+        show: false /*!QGroundControl.videoManager.fullScreen
               && (videoControl.pipState.state === videoControl.pipState.pipState
-                  || mapControl.pipState.state === mapControl.pipState.pipState)
+                  || mapControl.pipState.state === mapControl.pipState.pipState)*/
     }
 }

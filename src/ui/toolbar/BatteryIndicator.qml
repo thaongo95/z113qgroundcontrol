@@ -98,23 +98,49 @@ Item {
             //     }
             //     return ""
             // }
+            Rectangle{
+                id: batteryRect
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                //height: _root.height/2
+                width: height*2.5
+                color: "transparent"
 
-            QGCColoredImage {
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                width:              height
-                sourceSize.width:   width
-                source:             "/qmlimages/Battery.svg"
-                fillMode:           Image.PreserveAspectFit
-                color:              getBatteryColor()
-            }
+                border.width: 2
+                border.color: "black"//qgcPal.text
 
-            QGCLabel {
-                text:                   getBatteryPercentageText()
-                font.pointSize:         ScreenTools.mediumFontPointSize
-                color:                  getBatteryColor()
-                anchors.verticalCenter: parent.verticalCenter
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.margins: 2
+                    width: Math.round((battery.voltage.rawValue-21)/5.7*(batteryRect.width-4))
+                    color: "green"
+
+                }
+                Text{
+                    text:getBatteryPercentageText()
+                    anchors.centerIn: parent
+                    color: "black"
+                    font.pointSize: 10
+                }
             }
+            // QGCColoredImage {
+            //     anchors.top:        parent.top
+            //     anchors.bottom:     parent.bottom
+            //     width:              height
+            //     sourceSize.width:   width
+            //     source:             "/qmlimages/Battery.svg"
+            //     fillMode:           Image.PreserveAspectFit
+            //     color:              getBatteryColor()
+            // }
+
+            // QGCLabel {
+            //     text:                   getBatteryPercentageText()
+            //     font.pointSize:         ScreenTools.mediumFontPointSize
+            //     color:                  getBatteryColor()
+            //     anchors.verticalCenter: parent.verticalCenter
+            // }
         }
     }
 

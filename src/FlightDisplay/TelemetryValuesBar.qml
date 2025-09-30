@@ -20,7 +20,7 @@ Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              qgcPal.window
+    color:              "transparent"//qgcPal.window
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
     //property bool       bottomMode: true
@@ -101,26 +101,26 @@ Rectangle {
             userSettingsGroup:      telemetryBarUserSettingsGroup
             defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
         }
-        QGCColoredImage {
-            source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
-            mipmap:             true
-            width:              ScreenTools.minTouchPixels * 0.4 //ScreenTools.minTouchPixels * 0.75
-            height:             width
-            sourceSize.width:   width
-            color:              qgcPal.text
-            fillMode:           Image.PreserveAspectFit
-            visible:            QGroundControl.settingsManager.flyViewSettings.showEditTelemetryValue.rawValue
-            QGCMouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape:  Qt.PointingHandCursor
-                onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
-            }
-        }
-        GuidedActionConfirm {
-            Layout.fillWidth:   true
-            guidedController:   _guidedController
-            altitudeSlider:     _guidedAltSlider
-        }
+        // QGCColoredImage {
+        //     source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
+        //     mipmap:             true
+        //     width:              ScreenTools.minTouchPixels * 0.4 //ScreenTools.minTouchPixels * 0.75
+        //     height:             width
+        //     sourceSize.width:   width
+        //     color:              qgcPal.text
+        //     fillMode:           Image.PreserveAspectFit
+        //     visible:            QGroundControl.settingsManager.flyViewSettings.showEditTelemetryValue.rawValue
+        //     QGCMouseArea {
+        //         anchors.fill: parent
+        //         hoverEnabled: true
+        //         cursorShape:  Qt.PointingHandCursor
+        //         onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
+        //     }
+        // }
+        // GuidedActionConfirm {
+        //     Layout.fillWidth:   true
+        //     guidedController:   _guidedController
+        //     altitudeSlider:     _guidedAltSlider
+        // }
     }
 }

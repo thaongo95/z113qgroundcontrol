@@ -63,8 +63,9 @@ T.HorizontalFactValueGrid {
                             model:  object
 
                             InstrumentValueLabel {
+                                Layout.fillWidth:      true
                                 Layout.fillHeight:      true
-                                Layout.alignment:       Qt.AlignRight
+                                Layout.alignment:       Qt.AlignTop
                                 instrumentValueData:    object
                             }
                         }
@@ -87,7 +88,7 @@ T.HorizontalFactValueGrid {
 
                             InstrumentValueValue {
                                 Layout.fillHeight:      true
-                                Layout.alignment:       Qt.AlignLeft
+                                Layout.alignment:       Qt.AlignBottom
                                 Layout.preferredWidth:  valueRepeater.maxWidth
                                 instrumentValueData:    object
 
@@ -113,55 +114,55 @@ T.HorizontalFactValueGrid {
                 }
             }
 
-            ColumnLayout {
-                Layout.bottomMargin:    1
-                Layout.fillHeight:      true
-                Layout.preferredWidth:  ScreenTools.minTouchPixels / 2
-                spacing:                1
-                visible:                settingsUnlocked
-                enabled:                settingsUnlocked
+            // ColumnLayout {
+            //     Layout.bottomMargin:    1
+            //     Layout.fillHeight:      true
+            //     Layout.preferredWidth:  ScreenTools.minTouchPixels / 2
+            //     spacing:                1
+            //     visible:                settingsUnlocked
+            //     enabled:                settingsUnlocked
 
-                QGCButton {
-                    Layout.fillHeight:      true
-                    Layout.preferredHeight: ScreenTools.minTouchPixels
-                    Layout.preferredWidth:  parent.width
-                    text:                   qsTr("+")
-                    onClicked:              appendColumn()
-                }
+            //     QGCButton {
+            //         Layout.fillHeight:      true
+            //         Layout.preferredHeight: ScreenTools.minTouchPixels
+            //         Layout.preferredWidth:  parent.width
+            //         text:                   qsTr("+")
+            //         onClicked:              appendColumn()
+            //     }
 
-                QGCButton {
-                    Layout.fillHeight:      true
-                    Layout.preferredHeight: ScreenTools.minTouchPixels
-                    Layout.preferredWidth:  parent.width
-                    text:                   qsTr("-")
-                    enabled:                _root.columns.count > 1
-                    onClicked:              deleteLastColumn()
-                }
-            }
+            //     QGCButton {
+            //         Layout.fillHeight:      true
+            //         Layout.preferredHeight: ScreenTools.minTouchPixels
+            //         Layout.preferredWidth:  parent.width
+            //         text:                   qsTr("-")
+            //         enabled:                _root.columns.count > 1
+            //         onClicked:              deleteLastColumn()
+            //     }
+            // }
         }
 
-        RowLayout {
-            Layout.preferredHeight: ScreenTools.minTouchPixels / 2
-            Layout.fillWidth:       true
-            spacing:                1
-            visible:                settingsUnlocked
-            enabled:                settingsUnlocked
+        // RowLayout {
+        //     Layout.preferredHeight: ScreenTools.minTouchPixels / 2
+        //     Layout.fillWidth:       true
+        //     spacing:                1
+        //     visible:                settingsUnlocked
+        //     enabled:                settingsUnlocked
 
-            QGCButton {
-                Layout.fillWidth:       true
-                Layout.preferredHeight: parent.height
-                text:                   qsTr("+")
-                onClicked:              appendRow()
-            }
+        //     QGCButton {
+        //         Layout.fillWidth:       true
+        //         Layout.preferredHeight: parent.height
+        //         text:                   qsTr("+")
+        //         onClicked:              appendRow()
+        //     }
 
-            QGCButton {
-                Layout.fillWidth:       true
-                Layout.preferredHeight: parent.height
-                text:                   qsTr("-")
-                enabled:                _root.rowCount > 1
-                onClicked:              deleteLastRow()
-            }
-        }
+        //     QGCButton {
+        //         Layout.fillWidth:       true
+        //         Layout.preferredHeight: parent.height
+        //         text:                   qsTr("-")
+        //         enabled:                _root.rowCount > 1
+        //         onClicked:              deleteLastRow()
+        //     }
+        // }
     }
 
     QGCMouseArea {
@@ -186,9 +187,9 @@ T.HorizontalFactValueGrid {
         }
     }
 
-    Component {
-        id: valueEditDialog
+    // Component {
+    //     id: valueEditDialog
 
-        InstrumentValueEditDialog { }
-    }
+    //     InstrumentValueEditDialog { }
+    // }
 }

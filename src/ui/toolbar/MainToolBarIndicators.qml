@@ -19,10 +19,10 @@ Row {
     anchors.top:        parent.top
     anchors.bottom:     parent.bottom
     anchors.margins:    _toolIndicatorMargins
-    spacing:            ScreenTools.defaultFontPixelWidth * 1.5
+    spacing:            ScreenTools.defaultFontPixelWidth
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
-    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.66
+    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.1
 
     Repeater {
         id:     appRepeater

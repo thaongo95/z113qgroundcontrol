@@ -30,8 +30,9 @@ RowLayout {
     QGCLabel {
         id:             mainStatusLabel
         text:           mainStatusText()
-        font.pointSize: _vehicleInAir ? ScreenTools.defaultFontPointSize : ScreenTools.largeFontPointSize
-
+        font.pointSize: _vehicleInAir ? ScreenTools.defaultFontPointSize*0.5 : ScreenTools.largeFontPointSize*0.5
+        font.capitalization: Font.AllUppercase
+        font.bold: true
         property string _commLostText:      qsTr("Communication Lost")
         property string _readyToFlyText:    qsTr("Ready To Fly")
         property string _notReadyToFlyText: qsTr("Not Ready")
@@ -105,7 +106,7 @@ RowLayout {
         mipmap:     true
         color:      qgcPal.text
         source:     "/qmlimages/FlightModesComponentIcon.png"
-        visible:    flightModeMenu.visible
+        visible:    false//flightModeMenu.visible
     }
 
     Item {

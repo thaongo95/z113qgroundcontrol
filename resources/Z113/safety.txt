@@ -1,0 +1,25 @@
+1 Hướng dẫn bay an toàn
+    • Luôn bay ở những khu vực thoáng đãng, tránh xa người, tòa nhà và các chướng ngại vật khác.
+    • Không bay trong điều kiện thời tiết bất lợi như mưa, gió hoặc sương mù.
+    • Luôn luôn giữ UAV trong tầm nhìn.
+    • Đảm bảo pin được sạc đầy trước mỗi chuyến bay.
+    • Tránh bay gần sân bay, căn cứ quân sự và các khu vực hạn chế khác.
+    • Giảm thiểu nhiễu bằng cách tránh các khu vực có mức độ điện từ cao, chẳng hạn như các vị trí gần đường dây điện, cột điện, trạm biến áp và tháp phát sóng.
+    • KHÔNG cố chạm hoặc bắt UAV khi nó đang bay.
+    • KHÔNG cất cánh từ độ cao hơn 6000 m (19.685 ft) so với mực nước biển.
+    • KHÔNG cất cánh từ các vật thể chuyển động, chẳng hạn như ô tô và tàu thuyền.
+    • KHÔNG sử dụng máy bay, bộ điều khiển từ xa, pin và bộ sạc pin gần nơi xảy ra tai nạn, hỏa hoạn, nổ, lũ lụt, sóng thần, tuyết lở, lở đất, động đất, bụi hoặc bão cát.
+    • KHÔNG sử dụng bộ sạc pin trong môi trường ẩm ướt.
+2 Yêu cầu pháp lý
+    • Đăng ký UAV của bạn với cơ quan hàng không có thẩm quyền.
+    • Thực hiện theo các quy định của địa phương liên quan đến chuyến bay UAV.
+3 Bay có trách nhiệm
+    • Đảm bảo bạn KHÔNG bị ảnh hưởng của thuốc gây mê, rượu, ma túy hoặc bị chóng mặt, mệt mỏi, buồn nôn hoặc các tình trạng khác có thể làm suy yếu khả năng vận hành máy bay an toàn.
+    • Khi hạ cánh, trước tiên hãy tắt máy bay, sau đó tắt bộ điều khiển từ xa.
+    • KHÔNG sử dụng máy bay để thả, phóng, đốt hoặc ném bất kỳ vật nặng nguy hiểm nào vào nhà, người hoặc động vật có thể gây thương tích cá nhân hoặc thiệt hại tài sản.
+    • KHÔNG sử dụng máy bay đã bị rơi hoặc hư hỏng do tai nạn hoặc máy bay không trong tình trạng tốt.
+    • Đảm bảo phi công được đào tạo đầy đủ và có kế hoạch dự phòng cho các trường hợp khẩn cấp hoặc khi sự cố xảy ra.
+    • Đảm bảo lên kế hoạch rõ ràng trước khi bay. KHÔNG liều lĩnh điều khiển máy bay khi chưa sãn sàng.
+    • Tôn trọng quyền riêng tư của người khác khi sử dụng máy ảnh. Đảm bảo tuân thủ luật pháp, quy định và tiêu chuẩn đạo đức về quyền riêng tư.
+    • KHÔNG sử dụng sản phẩm này cho bất kỳ lý do nào khác ngoài mục đích sử dụng cá nhân thông thường.
+    • KHÔNG xâm phạm vào tài sản riêng tư của người khác.

@@ -34,7 +34,7 @@ Rectangle {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
-    property color  _mainStatusBGColor:    "#fa8072" //qgcPal.brandingPurple
+    property color  _mainStatusBGColor:   "red" // "#fa8072" //qgcPal.brandingPurple
 
     property SiYiCamera camera: SiYi.camera
     property SiYiTransmitter transmitter: SiYi.transmitter
@@ -51,17 +51,17 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    Rectangle {
-        anchors.fill:   viewButtonRow
-        visible:        currentToolbar === flyViewToolbar
+    // Rectangle {
+    //     anchors.fill:   viewButtonRow
+    //     visible:        currentToolbar === flyViewToolbar
 
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0;                                     color: _mainStatusBGColor }
-            GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-            GradientStop { position: 1;                                     color: _root.color }
-        }
-    }
+    //     gradient: Gradient {
+    //         orientation: Gradient.Horizontal
+    //         GradientStop { position: 0;                                     color: _mainStatusBGColor }
+    //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
+    //         GradientStop { position: 1;                                     color: _root.color }
+    //     }
+    // }
 
     RowLayout {
         id:                     viewButtonRow
@@ -70,13 +70,15 @@ Rectangle {
         anchors.bottom:         parent.bottom
         spacing:                ScreenTools.defaultFontPixelWidth / 2
 
-        QGCToolBarButton {
-            id:                     currentButton
-            Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
-            logo:                   true
-            onClicked:              mainWindow.showToolSelectDialog()  //mainWindow.showSettingsTool()
-        }
+        // QGCToolBarButton {
+        //     id:                     currentButton
+        //     Layout.preferredHeight: viewButtonRow.height
+        //     icon.source:            "/res/QGCLogoFull"
+        //     logo:                   true
+        //     onClicked:              mainWindow.showToolSelectDialog()  //mainWindow.showSettingsTool()
+        // }
+
+
 
         MainStatusIndicator {
             Layout.preferredHeight: viewButtonRow.height
@@ -86,6 +88,7 @@ Rectangle {
         QGCButton {
             id:                 disconnectButton
             text:               qsTr("Disconnect")
+            Layout.preferredHeight: viewButtonRow.height
             onClicked:          _activeVehicle.closeVehicle()
             visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
         }
@@ -94,22 +97,39 @@ Rectangle {
     QGCFlickable {
         id:                     toolsFlickable
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.left:           viewButtonRow.right
+        anchors.left:           _root.horizontalCenter
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
-        contentWidth:           indicatorLoader.x + indicatorLoader.width
+        anchors.right:          moreOption.left
+        anchors.rightMargin:    2
+        contentWidth:           indicatorLoader.width
         flickableDirection:     Flickable.HorizontalFlick
 
         Loader {
             id:                 indicatorLoader
-            anchors.left:       parent.left
+            anchors.right:       parent.right
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             source:             currentToolbar === flyViewToolbar ?
                                     "qrc:/toolbar/MainToolBarIndicators.qml" :
                                     (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
+        }
+    }
+    Rectangle {
+        id: moreOption
+        anchors.top:   parent.top
+        anchors.right:  parent.right
+        anchors.bottom: parent.bottom
+        width: parent.height
+        Image{
+            anchors.fill: parent
+            source:  "qrc:/resources/Z113/settingsbar.png"
+        }
+        color:          "transparent"
+        MouseArea{
+            anchors.fill: parent
+            onClicked: mainWindow.showGeneralPopup()
         }
     }
 
@@ -174,55 +194,55 @@ Rectangle {
         height:         _root.height * 0.05
         width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
         color:          qgcPal.colorGreen
-        visible:        !largeProgressBar.visible
+        visible:        true //!largeProgressBar.visible
     }
 
     // Large parameter download progress bar
-    Rectangle {
-        id:             largeProgressBar
-        anchors.bottom: parent.bottom
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        height:         parent.height
-        color:          qgcPal.window
-        visible:        _showLargeProgress
+    // Rectangle {
+    //     id:             largeProgressBar
+    //     anchors.bottom: parent.bottom
+    //     anchors.left:   parent.left
+    //     anchors.right:  parent.right
+    //     height:         parent.height
+    //     color:          qgcPal.window
+    //     visible:        _showLargeProgress
 
-        property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
-        property bool _userHide:                false
-        property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
+    //     property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
+    //     property bool _userHide:                false
+    //     property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
 
-        Connections {
-            target:                 QGroundControl.multiVehicleManager
-            function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
-        }
+    //     Connections {
+    //         target:                 QGroundControl.multiVehicleManager
+    //         function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
+    //     }
 
-        Rectangle {
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-            width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
-            color:          qgcPal.colorGreen
-        }
+    //     Rectangle {
+    //         anchors.top:    parent.top
+    //         anchors.bottom: parent.bottom
+    //         width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
+    //         color:          qgcPal.colorGreen
+    //     }
 
-        QGCLabel {
-            anchors.centerIn:   parent
-            text:               qsTr("Downloading")
-            font.pointSize:     ScreenTools.largeFontPointSize
-        }
+    //     QGCLabel {
+    //         anchors.centerIn:   parent
+    //         text:               qsTr("Downloading")
+    //         font.pointSize:     ScreenTools.largeFontPointSize
+    //     }
 
-        QGCLabel {
-            anchors.margins:    _margin
-            anchors.right:      parent.right
-            anchors.bottom:     parent.bottom
-            text:               qsTr("Click anywhere to hide")
+    //     QGCLabel {
+    //         anchors.margins:    _margin
+    //         anchors.right:      parent.right
+    //         anchors.bottom:     parent.bottom
+    //         text:               qsTr("Click anywhere to hide")
 
-            property real _margin: ScreenTools.defaultFontPixelWidth / 2
-        }
+    //         property real _margin: ScreenTools.defaultFontPixelWidth / 2
+    //     }
 
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:      largeProgressBar._userHide = true
-        }
-    }
+    //     MouseArea {
+    //         anchors.fill:   parent
+    //         onClicked:      largeProgressBar._userHide = true
+    //     }
+    // }
 
     // Row {
     //     spacing: 10

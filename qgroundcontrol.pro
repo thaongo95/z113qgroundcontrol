@@ -1535,6 +1535,56 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 }
 
 DISTFILES += \
+    resources/Z113/100AI.jpg \
+    resources/Z113/FPV.jpg \
+    resources/Z113/P5.jpg \
+    resources/Z113/UAV-100AI.jpg \
+    resources/Z113/UAV-50.jpg \
+    resources/Z113/UAV-COMBAT.jpg \
+    resources/Z113/UAV-FPV.jpg \
+    resources/Z113/UAV-Z6D.jpg \
+    resources/Z113/UAV50.jpg \
+    resources/Z113/UCAV.jpg \
+    resources/Z113/Z6D.jpg \
+    resources/Z113/albums.png \
+    resources/Z113/anh1.jpg \
+    resources/Z113/anh2.jpg \
+    resources/Z113/anh3.jpg \
+    resources/Z113/anh4.jpg \
+    resources/Z113/anh5.jpg \
+    resources/Z113/chat.png \
+    resources/Z113/documentation.png \
+    resources/Z113/drone.png \
+    resources/Z113/droneInfo.png \
+    resources/Z113/flag.png \
+    resources/Z113/gallery.png \
+    resources/Z113/gear.png \
+    resources/Z113/home-page.png \
+    resources/Z113/light-mode.png \
+    resources/Z113/list-white.png \
+    resources/Z113/list.png \
+    resources/Z113/location-marker-white.png \
+    resources/Z113/location-marker.png \
+    resources/Z113/log-file-white.png \
+    resources/Z113/log-file.png \
+    resources/Z113/manual.txt \
+    resources/Z113/manualdoc.png \
+    resources/Z113/measure-white.png \
+    resources/Z113/measure.png \
+    resources/Z113/night-mode.png \
+    resources/Z113/paper-plane-white.png \
+    resources/Z113/paper-plane.png \
+    resources/Z113/protocols.png \
+    resources/Z113/safety.png \
+    resources/Z113/safety.txt \
+    resources/Z113/scaleC.png \
+    resources/Z113/scalecolor.png \
+    resources/Z113/settings.png \
+    resources/Z113/unitsScale.png \
+    resources/Z113/video-player-white.png \
+    resources/Z113/video-player.png \
+    resources/Z113/vietnam.png \
+    resources/Z113/z6d_transparent.png \
     src/QmlControls/QGroundControl/Specific/qmldir
 
 #

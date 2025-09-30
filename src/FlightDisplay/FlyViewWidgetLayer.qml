@@ -69,7 +69,7 @@ Item {
         topEdgeCenterInset: parentToolInsets.topEdgeCenterInset
         topEdgeRightInset: parentToolInsets.topEdgeRightInset
         bottomEdgeLeftInset: parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset: mapScale.centerInset
+        //bottomEdgeCenterInset: mapScale.centerInset
         bottomEdgeRightInset: 0
     }
 
@@ -129,8 +129,8 @@ Item {
         anchors.horizontalCenter: telemetryPanel.horizontalCenter
         width: _rightPanelWidth
         spacing: _toolsMargin
-        visible: SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
-                                    && multiVehiclePanelSelector.showSingleVehiclePanel
+        visible:  false// SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
+                    //                && multiVehiclePanelSelector.showSingleVehiclePanel
         availableHeight: parent.height - y - _toolsMargin
 
         property real rightInset: visible ? parent.width - x : 0
@@ -170,10 +170,9 @@ Item {
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
         color: "white"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.horizontalCenter: parent.horizontalCenter
         visible: false
         radius: 5
         QGCLabel {
@@ -205,10 +204,9 @@ Item {
         id: resultRectangle    
         width: resultLabel.width + resultLabel.width * 0.4
         height: resultLabel.height + resultLabel.height * 0.4
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.horizontalCenter: parent.horizontalCenter
         color: "white"
         visible: false
         radius: 5
@@ -262,10 +260,9 @@ Item {
         id: is_recording
         width: recordingLabel.width + recordingLabel.width * 0.4
         height: recordingLabel.height + recordingLabel.height * 0.4
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.horizontalCenter: parent.horizontalCenter
         color: "white"
         visible: false
         radius: 5
@@ -316,13 +313,150 @@ Item {
             }
         }
     }
+    Rectangle{
+        id: droneIcon
+        anchors.bottom: _root.bottom
+        anchors.margins: height/6
+        anchors.horizontalCenter: _root.horizontalCenter
+        height: _root.height/12
+        width: height
+        color: "transparent"
+        radius: height/2
+        border.width: height/10
+        border.color: _activeVehicle ? "green" : Qt.lighter("red", 1.2)
+        Image{
+            anchors.centerIn: parent
+            height: parent.height/2
+            width: height
+            source: "qrc:/resources/Z113/drone.png"
+        }
+    }
+    // Rectangle{
+    //     id: flightModeMenu
+    //     height: _root.height/12
+    //     width: height*3
+    //     anchors.bottom: _root.bottom
+    //     anchors.margins: height/6
+    //     anchors.left: droneIcon.right
+    //     color: "blue"//"transparent"
+    //     FlightModeMenu {
+    //         anchors.centerIn:       parent
+    //         font.pointSize:         ScreenTools.largeFontPointSize //_vehicleInAir ?  ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
+    //         visible:                _activeVehicle
+    //     }
+    // }
+
+    Row{
+        id: rightRow
+        anchors.bottom: _root.bottom
+        anchors.left: droneIcon.right
+        anchors.right: _root.right
+        anchors.leftMargin: _root.width/30
+        anchors.rightMargin: _root.width/10
+        spacing:  width/15
+        Repeater{
+            model: _activeVehicle ? [{fact: _activeVehicle.heading, sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
+                {fact: _activeVehicle.pitch, sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
+                {fact: _activeVehicle.roll,sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
+                {fact: _activeVehicle.groundSpeed, sourceUrl: "qrc:/resources/Z113/black_speed.png"},
+                {fact: _activeVehicle.hobbs, sourceUrl: "qrc:/resources/Z113/black_clock.png"}] :
+                [{fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
+                {fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
+                {fact: "",sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
+                {fact: "", sourceUrl: "qrc:/resources/Z113/black_speed.png"},
+                {fact: "", sourceUrl: "qrc:/resources/Z113/black_clock.png"}]
+            delegate: Rectangle{
+                width: (rightRow.width-rightRow.width/15*4)/5
+                height: width*1.2
+                color: "transparent"
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.left:parent.left
+                    height: parent.height/3
+                    color: "transparent"
+                    Text {
+                        anchors.centerIn: parent
+                        font.pixelSize: 32
+                        color: "white" //qgcPal.text
+                        text: _activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact
+                    }
+                }
+                Rectangle{
+                    anchors.right: parent.right
+                    anchors.left:parent.left
+                    anchors.bottom: parent.bottom
+                    height: parent.height*2/3
+                    color: "transparent"
+                    Image{
+                        anchors.centerIn: parent
+                        width: parent.width/2
+                        height: width
+                        source: modelData.sourceUrl
+                    }
+                }
+            }
+        }
+    }
+    Row{
+        id: leftRow
+        anchors.bottom: _root.bottom
+        anchors.left: _root.left
+        anchors.right: droneIcon.left
+        anchors.leftMargin: _root.width/10
+        anchors.rightMargin: _root.width/30
+        spacing:  width/15
+        Repeater{
+            model: _activeVehicle ? [{fact: _activeVehicle.gps.count, sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
+                {fact: _activeVehicle.altitudeRelative,sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
+                {fact: _activeVehicle.distanceToHome, sourceUrl: "qrc:/resources/Z113/black_home.png"},
+                {fact: _activeVehicle.distanceToGCS,sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
+                {fact: _activeVehicle.temperature.temperature1,sourceUrl: "qrc:/resources/Z113/black_temperature.png"}] :
+                [{fact: "", sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
+                {fact: "",sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
+                {fact: "", sourceUrl: "qrc:/resources/Z113/black_home.png"},
+                {fact: "",sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
+                {fact: "",sourceUrl: "qrc:/resources/Z113/black_temperature.png"}]
+            delegate: Rectangle{
+                width: (leftRow.width-leftRow.width/15*4)/5
+                height: width*1.2
+                color: "transparent"
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.left:parent.left
+                    height: parent.height/3
+                    color: "transparent"
+                    Text {
+                        anchors.centerIn: parent
+                        font.pixelSize: 32
+                        color: "white" //qgcPal.text
+                        text: _activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact
+                    }
+                }
+                Rectangle{
+                    anchors.right: parent.right
+                    anchors.left:parent.left
+                    anchors.bottom: parent.bottom
+                    height: parent.height*2/3
+                    color: "transparent"
+                    Image{
+                        anchors.centerIn: parent
+                        width: parent.width/2
+                        height: width
+                        source: modelData.sourceUrl
+                    }
+                }
+            }
+        }
+    }
     TelemetryValuesBar {
         id: telemetryPanel
         // x: recalcXPosition()
         anchors.margins: _toolsMargin
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        visible: !SiYi.hideWidgets
+        visible: false //!SiYi.hideWidgets
 
         // States for custom layout support
         // states: [
@@ -390,24 +524,24 @@ Item {
     }
 
     //-- Virtual Joystick
-    Loader {
-        id: virtualJoystickMultiTouch
-        z: QGroundControl.zOrderTopMost + 1
-        width: parent.width - (_pipOverlay.width / 2)
-        height: Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
-        visible: _virtualJoystickEnabled && !QGroundControl.videoManager.fullScreen
-                 && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: parentToolInsets.leftEdgeBottomInset + ScreenTools.defaultFontPixelHeight * 2
-        anchors.horizontalCenter: parent.horizontalCenter
-        source: "qrc:/qml/VirtualJoystick.qml"
-        active: _virtualJoystickEnabled
-                && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
+    // Loader {
+    //     id: virtualJoystickMultiTouch
+    //     z: QGroundControl.zOrderTopMost + 1
+    //     width: parent.width - (_pipOverlay.width / 2)
+    //     height: Math.min(parent.height * 0.25, ScreenTools.defaultFontPixelWidth * 16)
+    //     visible: _virtualJoystickEnabled && !QGroundControl.videoManager.fullScreen
+    //              && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
+    //     anchors.bottom: parent.bottom
+    //     anchors.bottomMargin: parentToolInsets.leftEdgeBottomInset + ScreenTools.defaultFontPixelHeight * 2
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     source: "qrc:/qml/VirtualJoystick.qml"
+    //     active: _virtualJoystickEnabled
+    //             && !(_activeVehicle ? _activeVehicle.usingHighLatencyLink : false)
 
-        property bool autoCenterThrottle: QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
+    //     property bool autoCenterThrottle: QGroundControl.settingsManager.appSettings.virtualJoystickAutoCenterThrottle.rawValue
 
-        property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
-    }
+    //     property bool _virtualJoystickEnabled: QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue
+    // }
 
     FlyViewToolStrip {
         id: toolStrip
@@ -417,7 +551,7 @@ Item {
         anchors.top: parent.top
         z: QGroundControl.zOrderWidgets
         maxHeight: parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
-        visible: !QGroundControl.videoManager.fullScreen
+        visible:  false // !QGroundControl.videoManager.fullScreen
 
         onDisplayPreFlightChecklist: mainWindow.showPopupDialogFromComponent(
                                          preFlightChecklistPopup)
@@ -425,31 +559,31 @@ Item {
         property real leftInset: x + width
     }
 
-    FlyViewAirspaceIndicator {
-        anchors.top: parent.top
-        anchors.topMargin: ScreenTools.defaultFontPixelHeight * 0.25
-        anchors.horizontalCenter: parent.horizontalCenter
-        z: QGroundControl.zOrderWidgets
-        show: mapControl.pipState.state !== mapControl.pipState.pipState
-    }
+    // FlyViewAirspaceIndicator {
+    //     anchors.top: parent.top
+    //     anchors.topMargin: ScreenTools.defaultFontPixelHeight * 0.25
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     z: QGroundControl.zOrderWidgets
+    //     show: mapControl.pipState.state !== mapControl.pipState.pipState
+    // }
 
     VehicleWarnings {
         anchors.centerIn: parent
         z: QGroundControl.zOrderTopMost
     }
 
-    MapScale {
-        id: mapScale
-        anchors.margins: _toolsMargin
-        anchors.left: toolStrip.right
-        anchors.top: parent.top
-        mapControl: _mapControl
-        buttonsOnLeft: false
-        visible: !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale
-                 && mapControl.pipState.state === mapControl.pipState.fullState
+    // MapScale {
+    //     id: mapScale
+    //     anchors.margins: _toolsMargin
+    //     anchors.left: toolStrip.right
+    //     anchors.top: parent.top
+    //     mapControl: _mapControl
+    //     buttonsOnLeft: false
+    //     visible:   false /*!ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale
+    //              && mapControl.pipState.state === mapControl.pipState.fullState*/
 
-        property real centerInset: visible ? parent.height - y : 0
-    }
+    //     property real centerInset: visible ? parent.height - y : 0
+    // }
 
     Component {
         id: preFlightChecklistPopup
