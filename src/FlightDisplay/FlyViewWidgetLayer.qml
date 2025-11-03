@@ -23,7 +23,6 @@ import QGroundControl.Controls 1.0
 import QGroundControl.Airspace 1.0
 import QGroundControl.Airmap 1.0
 import QGroundControl.Controllers 1.0
-import QGroundControl.Controls 1.0
 import QGroundControl.FactSystem 1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap 1.0
@@ -69,7 +68,7 @@ Item {
         topEdgeCenterInset: parentToolInsets.topEdgeCenterInset
         topEdgeRightInset: parentToolInsets.topEdgeRightInset
         bottomEdgeLeftInset: parentToolInsets.bottomEdgeLeftInset
-        //bottomEdgeCenterInset: mapScale.centerInset
+        bottomEdgeCenterInset: mapScale.centerInset
         bottomEdgeRightInset: 0
     }
 
@@ -118,52 +117,75 @@ Item {
         visible: !multiVehiclePanelSelector.showSingleVehiclePanel
     }
 
-    FlyViewInstrumentPanel {
-        id: instrumentPanel
-        // anchors.margins: _toolsMargin
-        // //anchors.topMargin: anchors.margins + SiYi.iconsHeight
-        // anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        // anchors.right: parent.right
-        anchors.bottom: telemetryPanel.top
-        anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
-        width: _rightPanelWidth
-        spacing: _toolsMargin
-        visible:  false// SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
-                    //                && multiVehiclePanelSelector.showSingleVehiclePanel
-        availableHeight: parent.height - y - _toolsMargin
+    // FlyViewInstrumentPanel {
+    //     id: instrumentPanel
+    //     // anchors.margins: _toolsMargin
+    //     // //anchors.topMargin: anchors.margins + SiYi.iconsHeight
+    //     // anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+    //     // anchors.right: parent.right
+    //     anchors.bottom: parent.bottom
+    //     anchors.bottomMargin: _rightPanelWidth/2
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     width: _rightPanelWidth/2
+    //     spacing: _toolsMargin
+    //     visible:  SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
+    //                         && multiVehiclePanelSelector.showSingleVehiclePanel
+    //     availableHeight: _rightPanelWidth*2 //parent.height - y - _toolsMargin
 
-        property real rightInset: visible ? parent.width - x : 0
+    //     property real rightInset: visible ? parent.width - x : 0
+    // }
+
+    Rectangle {
+        id:                 instrumentPanel
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:              parent.width/8
+        height:             width
+        radius:             width/2
+        color:              "transparent"//qgcPal.window
+        border.width:       height/20
+        border.color:       _activeVehicle ? "green" : Qt.lighter("red", 1.4)
+
+        DeadMouseArea { anchors.fill: parent }
+
+        QGCCompassWidget {
+            id:                     compass
+            anchors.centerIn:           parent
+            size:                   parent.width-parent.border.width
+            vehicle:                globals.activeVehicle
+        }
     }
 
-    PhotoVideoControl {
-        id: photoVideoControl
-        anchors.margins: _toolsMargin
-        anchors.right: parent.right
-        width: _rightPanelWidth
-        state: _verticalCenter ? "verticalCenter" : "topAnchor"
-        visible: false  //!SiYi.hideWidgets
-        states: [
-            State {
-                name: "verticalCenter"
-                AnchorChanges {
-                    target: photoVideoControl
-                    anchors.top: undefined
-                    anchors.verticalCenter: _root.verticalCenter
-                }
-            },
-            State {
-                name: "topAnchor"
-                AnchorChanges {
-                    target: photoVideoControl
-                    anchors.verticalCenter: undefined
-                    anchors.top: instrumentPanel.bottom
-                }
-            }
-        ]
 
-        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
-    }
+    // PhotoVideoControl {
+    //     id: photoVideoControl
+    //     anchors.margins: _toolsMargin
+    //     anchors.right: parent.right
+    //     width: _rightPanelWidth
+    //     state: _verticalCenter ? "verticalCenter" : "topAnchor"
+    //     visible: false  //!SiYi.hideWidgets
+    //     states: [
+    //         State {
+    //             name: "verticalCenter"
+    //             AnchorChanges {
+    //                 target: photoVideoControl
+    //                 anchors.top: undefined
+    //                 anchors.verticalCenter: _root.verticalCenter
+    //             }
+    //         },
+    //         State {
+    //             name: "topAnchor"
+    //             AnchorChanges {
+    //                 target: photoVideoControl
+    //                 anchors.verticalCenter: undefined
+    //                 anchors.top: instrumentPanel.bottom
+    //             }
+    //         }
+    //     ]
+
+    //     property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
+    // }
 
     Rectangle {
         id: zoomMultipleRectangle
@@ -313,24 +335,25 @@ Item {
             }
         }
     }
-    Rectangle{
-        id: droneIcon
-        anchors.bottom: _root.bottom
-        anchors.margins: height/6
-        anchors.horizontalCenter: _root.horizontalCenter
-        height: _root.height/12
-        width: height
-        color: "transparent"
-        radius: height/2
-        border.width: height/10
-        border.color: _activeVehicle ? "green" : Qt.lighter("red", 1.2)
-        Image{
-            anchors.centerIn: parent
-            height: parent.height/2
-            width: height
-            source: "qrc:/resources/Z113/drone.png"
-        }
-    }
+    // Rectangle{
+    //     id: droneIcon
+    //     anchors.bottom: _root.bottom
+    //     anchors.margins: height/6
+    //     anchors.horizontalCenter: _root.horizontalCenter
+    //     height: _root.height/5
+    //     width: height
+    //     color: "transparent"
+    //     radius: height/2
+    //     border.width: height/10
+    //     border.color: _activeVehicle ? "green" : Qt.lighter("red", 1.2)
+
+    //     Image{
+    //         anchors.centerIn: parent
+    //         height: parent.height/2
+    //         width: height
+    //         source: "qrc:/resources/Z113/drone.png"
+    //     }
+    // }
     // Rectangle{
     //     id: flightModeMenu
     //     height: _root.height/12
@@ -349,7 +372,7 @@ Item {
     Row{
         id: rightRow
         anchors.bottom: _root.bottom
-        anchors.left: droneIcon.right
+        anchors.left: instrumentPanel.right
         anchors.right: _root.right
         anchors.leftMargin: _root.width/30
         anchors.rightMargin: _root.width/10
@@ -402,7 +425,7 @@ Item {
         id: leftRow
         anchors.bottom: _root.bottom
         anchors.left: _root.left
-        anchors.right: droneIcon.left
+        anchors.right: instrumentPanel.left
         anchors.leftMargin: _root.width/10
         anchors.rightMargin: _root.width/30
         spacing:  width/15
@@ -411,7 +434,7 @@ Item {
                 {fact: _activeVehicle.altitudeRelative,sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
                 {fact: _activeVehicle.distanceToHome, sourceUrl: "qrc:/resources/Z113/black_home.png"},
                 {fact: _activeVehicle.distanceToGCS,sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
-                {fact: _activeVehicle.temperature.temperature1,sourceUrl: "qrc:/resources/Z113/black_temperature.png"}] :
+                {fact: _activeVehicle.flightMode,sourceUrl: "/qmlimages/FlightModesComponentIcon.png"}] :
                 [{fact: "", sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
                 {fact: "",sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
                 {fact: "", sourceUrl: "qrc:/resources/Z113/black_home.png"},
@@ -431,7 +454,7 @@ Item {
                         anchors.centerIn: parent
                         font.pixelSize: 32
                         color: "white" //qgcPal.text
-                        text: _activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact
+                        text: (index===4) ? modelData.fact : (_activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact)
                     }
                 }
                 Rectangle{
@@ -559,31 +582,31 @@ Item {
         property real leftInset: x + width
     }
 
-    // FlyViewAirspaceIndicator {
-    //     anchors.top: parent.top
-    //     anchors.topMargin: ScreenTools.defaultFontPixelHeight * 0.25
-    //     anchors.horizontalCenter: parent.horizontalCenter
-    //     z: QGroundControl.zOrderWidgets
-    //     show: mapControl.pipState.state !== mapControl.pipState.pipState
-    // }
+    FlyViewAirspaceIndicator {
+        anchors.top: parent.top
+        anchors.topMargin: ScreenTools.defaultFontPixelHeight * 0.25
+        anchors.horizontalCenter: parent.horizontalCenter
+        z: QGroundControl.zOrderWidgets
+        show: mapControl.pipState.state !== mapControl.pipState.pipState
+    }
 
     VehicleWarnings {
         anchors.centerIn: parent
         z: QGroundControl.zOrderTopMost
     }
 
-    // MapScale {
-    //     id: mapScale
-    //     anchors.margins: _toolsMargin
-    //     anchors.left: toolStrip.right
-    //     anchors.top: parent.top
-    //     mapControl: _mapControl
-    //     buttonsOnLeft: false
-    //     visible:   false /*!ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale
-    //              && mapControl.pipState.state === mapControl.pipState.fullState*/
+    MapScale {
+        id: mapScale
+        anchors.margins: _toolsMargin
+        anchors.left: toolStrip.right
+        anchors.top: parent.top
+        mapControl: _mapControl
+        buttonsOnLeft: false
+        visible:   ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale
+                 && mapControl.pipState.state === mapControl.pipState.fullState
 
-    //     property real centerInset: visible ? parent.height - y : 0
-    // }
+        property real centerInset: visible ? parent.height - y : 0
+    }
 
     Component {
         id: preFlightChecklistPopup

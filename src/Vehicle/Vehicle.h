@@ -827,7 +827,7 @@ public:
     CheckList   checkListState          () { return _checkListState; }
     void        setCheckListState       (CheckList cl)  { _checkListState = cl; emit checkListStateChanged(); }
 
-    double loadProgress                 () const { return _loadProgress; }
+    double loadProgress                 () const { return isInitialConnectComplete() ? 1 : _loadProgress; }
 
     void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
     void setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);

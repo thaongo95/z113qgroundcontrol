@@ -19,46 +19,28 @@ import QGroundControl.FlightDisplay 1.0
 import QGroundControl.Palette       1.0
 
 
-ColumnLayout {
-    id:         root
-    spacing:    ScreenTools.defaultFontPixelHeight / 4
+Rectangle {
+    id:                 visualInstrument
+    height:             width //_outerRadius * 2
+    Layout.fillWidth:   true
+    radius:             width/2 //_outerRadius
+    color:              "transparent"//qgcPal.window
 
-    property real   _innerRadius:           (width - (_topBottomMargin * 3)) / 4
-    property real   _outerRadius:           _innerRadius + _topBottomMargin
-    property real   _spacing:               ScreenTools.defaultFontPixelHeight * 0.33
-    property real   _topBottomMargin:       (width * 0.05) / 2
+    DeadMouseArea { anchors.fill: parent }
 
-    QGCPalette { id: qgcPal }
+    // QGCAttitudeWidget {
+    //     id:                     attitude
+    //     anchors.leftMargin:     _topBottomMargin
+    //     anchors.left:           parent.left
+    //     size:                   _innerRadius * 2
+    //     vehicle:                globals.activeVehicle
+    //     anchors.verticalCenter: parent.verticalCenter
+    // }
 
-    Rectangle {
-        id:                 visualInstrument
-        height:             _outerRadius * 2
-        Layout.fillWidth:   true
-        radius:             _outerRadius
-        color:              "transparent"//qgcPal.window
-
-        DeadMouseArea { anchors.fill: parent }
-
-        // QGCAttitudeWidget {
-        //     id:                     attitude
-        //     anchors.leftMargin:     _topBottomMargin
-        //     anchors.left:           parent.left
-        //     size:                   _innerRadius * 2
-        //     vehicle:                globals.activeVehicle
-        //     anchors.verticalCenter: parent.verticalCenter
-        // }
-
-        QGCCompassWidget {
-            id:                     compass
-            anchors.leftMargin:     _topBottomMargin
-            anchors.left:           parent.left
-            size:                   _innerRadius * 2
-            vehicle:                globals.activeVehicle
-            anchors.horizontalCenter:  parent.horizontalCenter
-        }
-    }
-
-    TerrainProgress {
-        Layout.fillWidth: true
+    QGCCompassWidget {
+        id:                     compass
+        anchors.fill:     parent
+        size:                   parent.width
+        vehicle:                globals.activeVehicle
     }
 }

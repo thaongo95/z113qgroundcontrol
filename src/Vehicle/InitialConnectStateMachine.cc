@@ -268,37 +268,47 @@ void InitialConnectStateMachine::_protocolVersionRequestMessageHandler(void* res
 
     connectMachine->advance();
 }
+// void InitialConnectStateMachine::_stateRequestCompInfo(StateMachine* stateMachine)
+// {
+//     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
+//     Vehicle*                    vehicle         = connectMachine->_vehicle;
+
+//     qCDebug(InitialConnectStateMachineLog) << "_stateRequestCompInfo";
+//     connect(vehicle->_componentInformationManager, &ComponentInformationManager::progressUpdate, connectMachine,
+//             &InitialConnectStateMachine::gotProgressUpdate);
+//     vehicle->_componentInformationManager->requestAllComponentInformation(_stateRequestCompInfoComplete, connectMachine);
+// }
+
+// void InitialConnectStateMachine::_stateRequestCompInfoComplete(void* requestAllCompleteFnData)
+// {
+//     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(requestAllCompleteFnData);
+//     disconnect(connectMachine->_vehicle->_componentInformationManager, &ComponentInformationManager::progressUpdate,
+//             connectMachine, &InitialConnectStateMachine::gotProgressUpdate);
+
+//     connectMachine->advance();
+// }
+
+// void InitialConnectStateMachine::_stateRequestParameters(StateMachine* stateMachine)
+// {
+//     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
+//     Vehicle*                    vehicle         = connectMachine->_vehicle;
+
+//     qCDebug(InitialConnectStateMachineLog) << "_stateRequestParameters";
+//     connect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
+//             &InitialConnectStateMachine::gotProgressUpdate);
+//     vehicle->_parameterManager->refreshAllParameters();
+// }
 void InitialConnectStateMachine::_stateRequestCompInfo(StateMachine* stateMachine)
 {
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
-    Vehicle*                    vehicle         = connectMachine->_vehicle;
-
-    qCDebug(InitialConnectStateMachineLog) << "_stateRequestCompInfo";
-    connect(vehicle->_componentInformationManager, &ComponentInformationManager::progressUpdate, connectMachine,
-            &InitialConnectStateMachine::gotProgressUpdate);
-    vehicle->_componentInformationManager->requestAllComponentInformation(_stateRequestCompInfoComplete, connectMachine);
-}
-
-void InitialConnectStateMachine::_stateRequestCompInfoComplete(void* requestAllCompleteFnData)
-{
-    InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(requestAllCompleteFnData);
-    disconnect(connectMachine->_vehicle->_componentInformationManager, &ComponentInformationManager::progressUpdate,
-            connectMachine, &InitialConnectStateMachine::gotProgressUpdate);
-
     connectMachine->advance();
 }
 
 void InitialConnectStateMachine::_stateRequestParameters(StateMachine* stateMachine)
 {
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
-    Vehicle*                    vehicle         = connectMachine->_vehicle;
-
-    qCDebug(InitialConnectStateMachineLog) << "_stateRequestParameters";
-    connect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
-            &InitialConnectStateMachine::gotProgressUpdate);
-    vehicle->_parameterManager->refreshAllParameters();
+    connectMachine->advance();
 }
-
 void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine)
 {
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);

@@ -23,16 +23,16 @@ Column {
 
     property real availableHeight
 
-    AirspaceControl {
-        id:                 airspaceControl
-        width:              parent.width
-        planView:           false
-        visible:            QGroundControl.airmapSupported ? QGroundControl.settingsManager.airMapSettings.enableAirMap.rawValue : false
-    }
+    // AirspaceControl {
+    //     id:                 airspaceControl
+    //     width:              parent.width
+    //     planView:           false
+    //     visible:            QGroundControl.airmapSupported ? QGroundControl.settingsManager.airMapSettings.enableAirMap.rawValue : false
+    // }
 
     FlightDisplayViewWidgets {
         id:                 flightDisplayViewWidgets
-        width:              parent.width
+        anchors.fill:        parent
         missionController:  _missionController
     }
 }

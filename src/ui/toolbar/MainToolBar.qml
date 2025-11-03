@@ -62,12 +62,123 @@ Rectangle {
     //         GradientStop { position: 1;                                     color: _root.color }
     //     }
     // }
+    // RowLayout {
+    //     id:                     flightModeRow
+    //     anchors.bottomMargin:   1
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     spacing:                ScreenTools.defaultFontPixelWidth / 2
+    //     Item {
+    //         Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth / 2
+    //         height:                 1
+    //         //visible:                flightModeMenu.visible
+    //     }
+    //     // QGCColoredImage {
+    //     //     id:         flightModeIcon
+    //     //     width:      ScreenTools.defaultFontPixelWidth * 2
+    //     //     height:     ScreenTools.defaultFontPixelHeight * 0.75
+    //     //     fillMode:   Image.PreserveAspectFit
+    //     //     mipmap:     true
+    //     //     color:      qgcPal.text
+    //     //     source:     "/qmlimages/FlightModesComponentIcon.png"
+    //     //     visible:    flightModeMenu.visible
+    //     // }
+
+    //     // Item {
+    //     //     Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth / 2
+    //     //     height:                 1
+    //     //     visible:                flightModeMenu.visible
+    //     // }
+
+    //     // FlightModeMenu {
+    //     //     id:                     flightModeMenu
+    //     //     Layout.preferredHeight: _root.height
+    //     //     verticalAlignment:      Text.AlignVCenter
+    //     //     font.pointSize:         _vehicleInAir ?  ScreenTools.defaultFontPointSize : ScreenTools.smallFontPointSize
+    //     //     mouseAreaLeftMargin:    -(flightModeMenu.x - flightModeIcon.x)
+    //     //     visible:                _activeVehicle
+    //     // }
+
+    //     // Item {
+    //     //     Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+    //     //     height:                 1
+    //     //     visible:                vtolModeLabel.visible
+    //     // }
+
+
+    // }
+    Rectangle {
+        id: messageBox
+        anchors.margins: 5
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.left:           parent.left
+        width:          parent.width*2/5
+        color:          Qt.darker(qgcPal.window, 1.4)
+
+
+        function formatMessage(message) {
+            message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
+            message = message.replace(new RegExp("<#I>", "g"), "color: " + qgcPal.infoText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
+            message = message.replace(new RegExp("<#N>", "g"), "color: " + qgcPal.text + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
+            return message;
+        }
+        function getMessageColor() {
+            if (_activeVehicle) {
+                if (_activeVehicle.messageTypeNone)
+                    return qgcPal.colorGrey
+                if (_activeVehicle.messageTypeNormal)
+                    return qgcPal.colorBlue;
+                if (_activeVehicle.messageTypeWarning)
+                    return qgcPal.colorOrange;
+                if (_activeVehicle.messageTypeError)
+                    return qgcPal.colorRed;
+                // Cannot be so make make it obnoxious to show error
+                console.warn("MessageIndicator.qml:getMessageColor Invalid vehicle message type", _activeVehicle.messageTypeNone)
+                return "purple";
+            }
+            //-- It can only get here when closing (vehicle gone while window active)
+            return qgcPal.colorGrey
+        }
+
+        Connections {
+            target: _activeVehicle
+            onNewFormattedMessage: {
+                messageLabel.text = formattedMessage
+            }
+        }
+
+        QGCLabel {
+            id: messageLabel
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.left:      parent.left
+            anchors.right:     messageIcon.left
+            anchors.margins: ScreenTools.defaultFontPixelHeight * 0.4
+            // text: _activeVehicle.messageCount  ? qsTr("No Messages") : messageBox.latestMessage
+            textFormat: Text.RichText
+            wrapMode: Text.Wrap
+            color: messageBox.getMessageColor()
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: 22
+        }
+        Loader {
+            id:                 messageIcon
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.right:      parent.right
+            anchors.margins: 3
+            source:             "qrc:/toolbar/MessageIndicator.qml"
+
+        }
+    }
 
     RowLayout {
         id:                     viewButtonRow
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing:                ScreenTools.defaultFontPixelWidth / 2
 
         // QGCToolBarButton {
@@ -77,8 +188,6 @@ Rectangle {
         //     logo:                   true
         //     onClicked:              mainWindow.showToolSelectDialog()  //mainWindow.showSettingsTool()
         // }
-
-
 
         MainStatusIndicator {
             Layout.preferredHeight: viewButtonRow.height
@@ -97,7 +206,7 @@ Rectangle {
     QGCFlickable {
         id:                     toolsFlickable
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.left:           _root.horizontalCenter
+        anchors.left:           viewButtonRow.right
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
@@ -194,55 +303,55 @@ Rectangle {
         height:         _root.height * 0.05
         width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
         color:          qgcPal.colorGreen
-        visible:        true //!largeProgressBar.visible
+        visible:        !largeProgressBar.visible
     }
 
-    // Large parameter download progress bar
-    // Rectangle {
-    //     id:             largeProgressBar
-    //     anchors.bottom: parent.bottom
-    //     anchors.left:   parent.left
-    //     anchors.right:  parent.right
-    //     height:         parent.height
-    //     color:          qgcPal.window
-    //     visible:        _showLargeProgress
+    //Large parameter download progress bar
+    Rectangle {
+        id:             largeProgressBar
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        anchors.right:  parent.right
+        height:         parent.height
+        color:          qgcPal.window
+        visible:        _showLargeProgress
 
-    //     property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
-    //     property bool _userHide:                false
-    //     property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
+        property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
+        property bool _userHide:                false
+        property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
 
-    //     Connections {
-    //         target:                 QGroundControl.multiVehicleManager
-    //         function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
-    //     }
+        Connections {
+            target:                 QGroundControl.multiVehicleManager
+            function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
+        }
 
-    //     Rectangle {
-    //         anchors.top:    parent.top
-    //         anchors.bottom: parent.bottom
-    //         width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
-    //         color:          qgcPal.colorGreen
-    //     }
+        Rectangle {
+            anchors.top:    parent.top
+            anchors.bottom: parent.bottom
+            width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
+            color:          qgcPal.colorGreen
+        }
 
-    //     QGCLabel {
-    //         anchors.centerIn:   parent
-    //         text:               qsTr("Downloading")
-    //         font.pointSize:     ScreenTools.largeFontPointSize
-    //     }
+        QGCLabel {
+            anchors.centerIn:   parent
+            text:               qsTr("Downloading")
+            font.pointSize:     ScreenTools.largeFontPointSize
+        }
 
-    //     QGCLabel {
-    //         anchors.margins:    _margin
-    //         anchors.right:      parent.right
-    //         anchors.bottom:     parent.bottom
-    //         text:               qsTr("Click anywhere to hide")
+        QGCLabel {
+            anchors.margins:    _margin
+            anchors.right:      parent.right
+            anchors.bottom:     parent.bottom
+            text:               qsTr("Click anywhere to hide")
 
-    //         property real _margin: ScreenTools.defaultFontPixelWidth / 2
-    //     }
+            property real _margin: ScreenTools.defaultFontPixelWidth / 2
+        }
 
-    //     MouseArea {
-    //         anchors.fill:   parent
-    //         onClicked:      largeProgressBar._userHide = true
-    //     }
-    // }
+        MouseArea {
+            anchors.fill:   parent
+            onClicked:      largeProgressBar._userHide = true
+        }
+    }
 
     // Row {
     //     spacing: 10

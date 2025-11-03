@@ -467,6 +467,8 @@
         <file>resources/Z113/black_placeholder.png</file>
         <file>resources/Z113/black_speed.png</file>
         <file>resources/Z113/settingsbar.png</file>
+        <file>resources/Z113/camera.png</file>
+        <file>resources/Z113/google-maps.png</file>
     </qresource>
     <qresource prefix="/qm"/>
     <qresource prefix="/q"/>

@@ -48,6 +48,7 @@ public:
     bool missingParameters  (void) const { return _missingParameters; }
     double loadProgress     (void) const { return _loadProgress; }
 
+
     /// @return Directory of parameter caches
     static QDir parameterCacheDir();
 

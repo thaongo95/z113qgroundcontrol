@@ -98,51 +98,7 @@ RowLayout {
         height:                 1
     }
 
-    QGCColoredImage {
-        id:         flightModeIcon
-        width:      ScreenTools.defaultFontPixelWidth * 2
-        height:     ScreenTools.defaultFontPixelHeight * 0.75
-        fillMode:   Image.PreserveAspectFit
-        mipmap:     true
-        color:      qgcPal.text
-        source:     "/qmlimages/FlightModesComponentIcon.png"
-        visible:    false//flightModeMenu.visible
-    }
 
-    Item {
-        Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth / 2
-        height:                 1
-        visible:                flightModeMenu.visible
-    }
-
-    FlightModeMenu {
-        id:                     flightModeMenu
-        Layout.preferredHeight: _root.height
-        verticalAlignment:      Text.AlignVCenter
-        font.pointSize:         _vehicleInAir ?  ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
-        mouseAreaLeftMargin:    -(flightModeMenu.x - flightModeIcon.x)
-        visible:                _activeVehicle
-    }
-
-    Item {
-        Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        height:                 1
-        visible:                vtolModeLabel.visible
-    }
-
-    QGCLabel {
-        id:                     vtolModeLabel
-        Layout.preferredHeight: _root.height
-        verticalAlignment:      Text.AlignVCenter
-        text:                   _vtolInFWDFlight ? qsTr("FW(vtol)") : qsTr("MR(vtol)")
-        font.pointSize:         ScreenTools.largeFontPointSize
-        visible:                _activeVehicle ? _activeVehicle.vtol && _vehicleInAir : false
-
-        QGCMouseArea {
-            anchors.fill:   parent
-            onClicked:      mainWindow.showIndicatorPopup(vtolModeLabel, vtolTransitionComponent)
-        }
-    }
 
     Component {
         id: sensorStatusInfoComponent

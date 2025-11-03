@@ -336,24 +336,7 @@ ApplicationWindow {
         height:     ScreenTools.toolbarHeight*0.4 //planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight*0.9
         visible:    !QGroundControl.videoManager.fullScreen
     }
-    function showGeneralPopup(){
-        generalPopup.open()
-    }
 
-    Popup {
-        id: generalPopup
-        x: parent.width/3
-        y: 0
-        width: parent.width*2/3
-        height: parent.height
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-        GeneralSettings{
-            anchors.fill: parent
-        }
-
-    }
     footer: LogReplayStatusBar {
         visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
     }
@@ -752,6 +735,23 @@ ApplicationWindow {
         onClosed: {
             loader.sourceComponent = null
             indicatorPopup.currentIndicator = null
+        }
+    }
+    function showGeneralPopup(){
+        generalPopup.open()
+    }
+
+    Popup {
+        id: generalPopup
+        x: parent.width/3
+        y: 0
+        width: parent.width*2/3
+        height: parent.height
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        GeneralSettings{
+            anchors.fill: parent
         }
     }
 }
