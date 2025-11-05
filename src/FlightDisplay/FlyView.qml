@@ -162,38 +162,38 @@ Item {
         item2: QGroundControl.videoManager.hasVideo ? videoControl : null
         fullZOrder: _fullItemZorder
         pipZOrder: _pipItemZorder
-        show: false /*!QGroundControl.videoManager.fullScreen
+        show: !QGroundControl.videoManager.fullScreen
               && (videoControl.pipState.state === videoControl.pipState.pipState
-                  || mapControl.pipState.state === mapControl.pipState.pipState)*/
+                  || mapControl.pipState.state === mapControl.pipState.pipState)
         Component.onCompleted: {
             mapControl.pipState.state = mapControl.pipState.pipState
             videoControl.pipState.state = videoControl.pipState.fullState
-            _pipOverlay.item1.visible = false
-            _pipOverlay.item2.visible = true   // hide PiP (small map/video)
+            //_pipOverlay.item1.visible = false
+           // _pipOverlay.item2.visible = true   // hide PiP (small map/video)
         }
     }
-    Image {
-        id: swapButton
-        source:  mapControl.pipState.state === mapControl.pipState.fullState ? "qrc:/resources/Z113/camera.png" : "qrc:/resources/Z113/google-maps.png"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.margins: 10
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                if (mapControl.pipState.state === mapControl.pipState.fullState) {
-                        mapControl.pipState.state = mapControl.pipState.pipState
-                        videoControl.pipState.state = videoControl.pipState.fullState
-                        _pipOverlay.item1.visible = false
-                        _pipOverlay.item2.visible = true
-                    } else {
-                        mapControl.pipState.state = mapControl.pipState.fullState
-                        videoControl.pipState.state = videoControl.pipState.pipState
-                        _pipOverlay.item1.visible = true
-                        _pipOverlay.item2.visible = false
-                    }
-            }
-        }
+    // Image {
+    //     id: swapButton
+    //     source:  mapControl.pipState.state === mapControl.pipState.fullState ? "qrc:/resources/Z113/camera.png" : "qrc:/resources/Z113/google-maps.png"
+    //     anchors.top: parent.top
+    //     anchors.right: parent.right
+    //     anchors.margins: 10
+    //     MouseArea{
+    //         anchors.fill: parent
+    //         onClicked: {
+    //             if (mapControl.pipState.state === mapControl.pipState.fullState) {
+    //                     mapControl.pipState.state = mapControl.pipState.pipState
+    //                     videoControl.pipState.state = videoControl.pipState.fullState
+    //                     _pipOverlay.item1.visible = false
+    //                     _pipOverlay.item2.visible = true
+    //                 } else {
+    //                     mapControl.pipState.state = mapControl.pipState.fullState
+    //                     videoControl.pipState.state = videoControl.pipState.pipState
+    //                     _pipOverlay.item1.visible = true
+    //                     _pipOverlay.item2.visible = false
+    //                 }
+    //         }
+    //     }
 
-    }
+    // }
 }

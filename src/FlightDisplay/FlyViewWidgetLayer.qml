@@ -156,8 +156,156 @@ Item {
             vehicle:                globals.activeVehicle
         }
     }
+    Label{
+        id: attitudeValue
+        anchors.verticalCenter: instrumentPanel.verticalCenter
+        anchors.right: instrumentPanel.left
+        anchors.margins: 5
+        text: _activeVehicle ? (_activeVehicle.altitudeRelative.valueString +" "+ _activeVehicle.altitudeRelative.units) : ("_ " )
+        font.pixelSize: 32
+        color: "white"
+    }
+    Label{
+        id: horizonSpeedValue
+        anchors.horizontalCenter:  attitudeValue.horizontalCenter
+        anchors.top: attitudeValue.bottom
+        anchors.margins: 5
+        text: _activeVehicle ? (_activeVehicle.airSpeed.valueString +" "+ _activeVehicle.airSpeed.units) : ("_ " )
+        font.pixelSize: 24
+        color: "white"
+    }
 
-
+    Label{
+        id: distanceValue
+        anchors.verticalCenter: instrumentPanel.verticalCenter
+        anchors.left: instrumentPanel.right
+        anchors.margins: 5
+        text: _activeVehicle ? (_activeVehicle.distanceToHome.valueString +" "+ _activeVehicle.distanceToHome.units) : ("_ ")
+        font.pixelSize: 32
+        color: "white"
+    }
+    Label{
+        id: verticalSpeedValue
+        anchors.horizontalCenter:  distanceValue.horizontalCenter
+        anchors.top: distanceValue.bottom
+        anchors.margins: 5
+        text: _activeVehicle ? (_activeVehicle.groundSpeed.valueString +" "+ _activeVehicle.groundSpeed.units) : ("_ " )
+        font.pixelSize: 24
+        color: "white"
+    }
+    Label{
+        id: distanceToStation
+        anchors.horizontalCenter:  distanceValue.horizontalCenter
+        anchors.bottom: distanceValue.top
+        anchors.margins: 5
+        text: _activeVehicle ? (_activeVehicle.distanceToGCS.valueString +" "+ _activeVehicle.distanceToGCS.units) : ("_ " )
+        font.pixelSize: 24
+        color: "white"
+    }
+    // Row{
+    //     id: rightRow
+    //     anchors.bottom: _root.bottom
+    //     anchors.left: instrumentPanel.right
+    //     anchors.right: _root.right
+    //     anchors.leftMargin: _root.width/30
+    //     anchors.rightMargin: _root.width/10
+    //     spacing:  width/15
+    //     Repeater{
+    //         model: _activeVehicle ? [{fact: _activeVehicle.heading, sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
+    //             {fact: _activeVehicle.pitch, sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
+    //             {fact: _activeVehicle.roll,sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
+    //             {fact: _activeVehicle.groundSpeed, sourceUrl: "qrc:/resources/Z113/black_speed.png"},
+    //             {fact: _activeVehicle.hobbs, sourceUrl: "qrc:/resources/Z113/black_clock.png"}] :
+    //             [{fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
+    //             {fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
+    //             {fact: "",sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
+    //             {fact: "", sourceUrl: "qrc:/resources/Z113/black_speed.png"},
+    //             {fact: "", sourceUrl: "qrc:/resources/Z113/black_clock.png"}]
+    //         delegate: Rectangle{
+    //             width: (rightRow.width-rightRow.width/15*4)/5
+    //             height: width*1.2
+    //             color: "transparent"
+    //             Rectangle{
+    //                 anchors.top: parent.top
+    //                 anchors.right: parent.right
+    //                 anchors.left:parent.left
+    //                 height: parent.height/3
+    //                 color: "transparent"
+    //                 Text {
+    //                     anchors.centerIn: parent
+    //                     font.pixelSize: 32
+    //                     color: "white" //qgcPal.text
+    //                     text: _activeVehicle ? (modelData.fact.valueString +" "+ modelData.fact.units) : ("_ " +modelData.fact.units)
+    //                 }
+    //             }
+    //             Rectangle{
+    //                 anchors.right: parent.right
+    //                 anchors.left:parent.left
+    //                 anchors.bottom: parent.bottom
+    //                 height: parent.height*2/3
+    //                 color: "transparent"
+    //                 Image{
+    //                     anchors.centerIn: parent
+    //                     width: parent.width/2
+    //                     height: width
+    //                     source: modelData.sourceUrl
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // Row{
+    //     id: leftRow
+    //     anchors.bottom: _root.bottom
+    //     anchors.left: _root.left
+    //     anchors.right: instrumentPanel.left
+    //     anchors.leftMargin: _root.width/10
+    //     anchors.rightMargin: _root.width/30
+    //     spacing:  width/15
+    //     Repeater{
+    //         model: _activeVehicle ? [{fact: _activeVehicle.gps.count, sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
+    //             {fact: _activeVehicle.altitudeRelative,sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
+    //             {fact: _activeVehicle.distanceToHome, sourceUrl: "qrc:/resources/Z113/black_home.png"},
+    //             {fact: _activeVehicle.distanceToGCS,sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
+    //             {fact: _activeVehicle.flightMode,sourceUrl: "/qmlimages/FlightModesComponentIcon.png"}] :
+    //             [{fact: "", sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
+    //             {fact: "",sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
+    //             {fact: "", sourceUrl: "qrc:/resources/Z113/black_home.png"},
+    //             {fact: "",sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
+    //             {fact: "",sourceUrl: "qrc:/resources/Z113/black_temperature.png"}]
+    //         delegate: Rectangle{
+    //             width: (leftRow.width-leftRow.width/15*4)/5
+    //             height: width*1.2
+    //             color: "transparent"
+    //             Rectangle{
+    //                 anchors.top: parent.top
+    //                 anchors.right: parent.right
+    //                 anchors.left:parent.left
+    //                 height: parent.height/3
+    //                 color: "transparent"
+    //                 Text {
+    //                     anchors.centerIn: parent
+    //                     font.pixelSize: 32
+    //                     color: "white" //qgcPal.text
+    //                     text: (index===4) ? modelData.fact : (_activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact)
+    //                 }
+    //             }
+    //             Rectangle{
+    //                 anchors.right: parent.right
+    //                 anchors.left:parent.left
+    //                 anchors.bottom: parent.bottom
+    //                 height: parent.height*2/3
+    //                 color: "transparent"
+    //                 Image{
+    //                     anchors.centerIn: parent
+    //                     width: parent.width/2
+    //                     height: width
+    //                     source: modelData.sourceUrl
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     // PhotoVideoControl {
     //     id: photoVideoControl
     //     anchors.margins: _toolsMargin
@@ -369,110 +517,7 @@ Item {
     //     }
     // }
 
-    Row{
-        id: rightRow
-        anchors.bottom: _root.bottom
-        anchors.left: instrumentPanel.right
-        anchors.right: _root.right
-        anchors.leftMargin: _root.width/30
-        anchors.rightMargin: _root.width/10
-        spacing:  width/15
-        Repeater{
-            model: _activeVehicle ? [{fact: _activeVehicle.heading, sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
-                {fact: _activeVehicle.pitch, sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
-                {fact: _activeVehicle.roll,sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
-                {fact: _activeVehicle.groundSpeed, sourceUrl: "qrc:/resources/Z113/black_speed.png"},
-                {fact: _activeVehicle.hobbs, sourceUrl: "qrc:/resources/Z113/black_clock.png"}] :
-                [{fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-y.png"},
-                {fact: "", sourceUrl: "qrc:/resources/Z113/black_letter-p.png"},
-                {fact: "",sourceUrl: "qrc:/resources/Z113/black_letter-r.png"},
-                {fact: "", sourceUrl: "qrc:/resources/Z113/black_speed.png"},
-                {fact: "", sourceUrl: "qrc:/resources/Z113/black_clock.png"}]
-            delegate: Rectangle{
-                width: (rightRow.width-rightRow.width/15*4)/5
-                height: width*1.2
-                color: "transparent"
-                Rectangle{
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    anchors.left:parent.left
-                    height: parent.height/3
-                    color: "transparent"
-                    Text {
-                        anchors.centerIn: parent
-                        font.pixelSize: 32
-                        color: "white" //qgcPal.text
-                        text: _activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact
-                    }
-                }
-                Rectangle{
-                    anchors.right: parent.right
-                    anchors.left:parent.left
-                    anchors.bottom: parent.bottom
-                    height: parent.height*2/3
-                    color: "transparent"
-                    Image{
-                        anchors.centerIn: parent
-                        width: parent.width/2
-                        height: width
-                        source: modelData.sourceUrl
-                    }
-                }
-            }
-        }
-    }
-    Row{
-        id: leftRow
-        anchors.bottom: _root.bottom
-        anchors.left: _root.left
-        anchors.right: instrumentPanel.left
-        anchors.leftMargin: _root.width/10
-        anchors.rightMargin: _root.width/30
-        spacing:  width/15
-        Repeater{
-            model: _activeVehicle ? [{fact: _activeVehicle.gps.count, sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
-                {fact: _activeVehicle.altitudeRelative,sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
-                {fact: _activeVehicle.distanceToHome, sourceUrl: "qrc:/resources/Z113/black_home.png"},
-                {fact: _activeVehicle.distanceToGCS,sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
-                {fact: _activeVehicle.flightMode,sourceUrl: "/qmlimages/FlightModesComponentIcon.png"}] :
-                [{fact: "", sourceUrl: "qrc:/resources/Z113/black_satellite.png"},
-                {fact: "",sourceUrl: "qrc:/resources/Z113/black_aerial.png"},
-                {fact: "", sourceUrl: "qrc:/resources/Z113/black_home.png"},
-                {fact: "",sourceUrl: "qrc:/resources/Z113/black_placeholder.png"},
-                {fact: "",sourceUrl: "qrc:/resources/Z113/black_temperature.png"}]
-            delegate: Rectangle{
-                width: (leftRow.width-leftRow.width/15*4)/5
-                height: width*1.2
-                color: "transparent"
-                Rectangle{
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    anchors.left:parent.left
-                    height: parent.height/3
-                    color: "transparent"
-                    Text {
-                        anchors.centerIn: parent
-                        font.pixelSize: 32
-                        color: "white" //qgcPal.text
-                        text: (index===4) ? modelData.fact : (_activeVehicle ? modelData.fact.valueString +" "+ modelData.fact.units : modelData.fact)
-                    }
-                }
-                Rectangle{
-                    anchors.right: parent.right
-                    anchors.left:parent.left
-                    anchors.bottom: parent.bottom
-                    height: parent.height*2/3
-                    color: "transparent"
-                    Image{
-                        anchors.centerIn: parent
-                        width: parent.width/2
-                        height: width
-                        source: modelData.sourceUrl
-                    }
-                }
-            }
-        }
-    }
+
     TelemetryValuesBar {
         id: telemetryPanel
         // x: recalcXPosition()

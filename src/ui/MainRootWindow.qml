@@ -16,6 +16,7 @@ import QtQuick.Window   2.11
 import QGroundControl               1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.Controls      1.0
+import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
@@ -31,6 +32,65 @@ ApplicationWindow {
     visible:        true
 
     property SiYiCamera siYiCamera: SiYi.camera
+
+
+    MAVLinkInspectorController {
+        id: controller
+    }
+    property var    curSystem:          controller ? controller.activeSystem : null
+    property var    button_state    //curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
+    function findButtonMessage(){
+
+        for (var i=0; i< controller.systemNames.length; ++i){
+            var sysName = controller.systemNames.get(i)
+            //var sysName = controller.systemNames[i]
+            if (sysName === "BUTTON_CHANGED"){
+                return 1
+            }
+        }
+        return 0
+    }
+    function findButtonState(){
+        for (var i=0; i< controller.systemNames.length; ++i){
+            var sysName = controller.systemNames.get(i)
+            //var sysName = controller.systemNames[i]
+            if (sysName === "BUTTON_CHANGED"){
+                var msg = curSystem.messages.get(i)
+                for(let field of msg.fields){
+                    if (field.name ==="state"){
+                        return fields.value
+                    }
+                }
+            }
+        }
+        return "No state"
+    }
+
+    Rectangle{
+        id: greenBt
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        width: 500
+        height: 500
+        radius: 25
+        visible: true
+        color: "blue"
+        Text{
+            id: btState
+            font.pixelSize: 48
+            anchors.centerIn: parent
+            color: "black"
+        }
+
+        Connections {
+            target: controller
+            onActiveSystemChanged: {
+                greenBt.color = findButtonMessage() ? "green" : "red"
+                btState.text = findButtonState()
+            }
+        }
+    }
+
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -583,7 +643,7 @@ ApplicationWindow {
             _vehicleMessageQueue.push(message)
         } else {
             _vehicleMessage = message
-            criticalVehicleMessagePopup.open()
+            //criticalVehicleMessagePopup.open()
         }
     }
 
