@@ -434,6 +434,7 @@ HEADERS += \
     src/SiYi/SiYiCrcApi.h \
     src/SiYi/SiYiTcpClient.h \
     src/SiYi/SiYiTransmitter.h \
+    src/Vehicle/ButtonChangeState.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
@@ -452,6 +453,7 @@ SOURCES += \
     src/SiYi/SiYiCrcApi.cc \
     src/SiYi/SiYiTcpClient.cc \
     src/SiYi/SiYiTransmitter.cc \
+    src/Vehicle/ButtonChangeState.cpp \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \

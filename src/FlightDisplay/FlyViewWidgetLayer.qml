@@ -455,4 +455,211 @@ Item {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {}
     }
+    MAVLinkInspectorController {
+         id: controller
+    }
+    property var curSystem: controller ? controller.activeSystem : null
+    //property var servoMsg: null
+    property var currentMsg:  curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
+    function findServoMsg() {
+        if (!curSystem || !curSystem.messages)
+            return
+
+        for (var i = 0; i < curSystem.messages.count; ++i) {
+            var msg = curSystem.messages.get(i)
+            //console.log("           " + msg.name)
+            if (msg.name === "SERVO_OUTPUT_RAW") {
+                curSystem.selected = i
+
+                return
+            }
+        }
+        //servoMsg = null
+    }
+    function findServoValue(){
+        var servoMsg = curSystem.messages.get(curSystem.selected)
+        for (var j = 0; j< servoMsg.fields.count; ++j){
+            var field = servoMsg.fields.get(j)
+            if (field.name === "servo6_raw"){
+                console.log(field.value)
+                servo6Value.text = field.value
+                var x6 = Number(field.value)
+                if ((x6>=1850)&&(x6<=1950)) {servo6Indicator.color = "red"}
+                else if ((x6<=1150)&&(x6>=950)) {servo6Indicator.color = "#ba55d3"}
+                else {servo6Indicator.color = "green"}
+            }
+            if (field.name === "servo8_raw"){
+                console.log(field.value)
+                servo8Value.text = field.value
+                var x8 = Number(field.value)
+                if ((x8>=1850)&&(x8<=1950)) {servo8Indicator.color = "red"}
+                else if ((x8<=1150)&&(x8>=950)) {servo8Indicator.color = "#ba55d3"}
+                else {servo8Indicator.color = "green"}
+            }
+        }
+    }
+
+    function findButtonChange() {
+        if (!curSystem || !curSystem.messages)
+            return
+
+        for (var i = 0; i < curSystem.messages.count; ++i) {
+            var msg = curSystem.messages.get(i)
+            //console.log("           " + msg.name)
+            if (msg.name === "BUTTON_CHANGE") {
+                curSystem.selected = i
+                return
+            }
+        }
+    }
+    function findButtonState(){
+        var buttonMsg = curSystem.messages.get(curSystem.selected)
+        for (var j = 0; j< buttonMsg.fields.count; ++j){
+            var field = buttonMsg.fields.get(j)
+            if (field.name === "state"){
+                if (field.value === "3"){
+                    button1Value.text = "Close"
+                    button2Value.text = "Close"
+                    button1Indicator.color = "green"
+                    button2Indicator.color = "green"
+                }
+                else if (field.value === "2"){
+                    button1Value.text = "Open"
+                    button2Value.text = "Close"
+                    button1Indicator.color = "red"
+                    button2Indicator.color = "green"
+                }
+                else if (field.value === "0" ){
+                    button1Value.text = "Open"
+                    button2Value.text = "Open"
+                    button1Indicator.color = "red"
+                    button2Indicator.color = "red"
+                }
+            }
+        }
+    }
+    Timer {
+        id: updateTimer
+        interval: 200
+        running: true
+        repeat: true
+        onTriggered: {
+            findServoMsg()
+            findServoValue()
+            findButtonChange()
+            findButtonState()
+        }
+    }
+    Rectangle{
+        id: servo6Indicator
+        anchors.top: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "PLUSE 1"
+            font.bold: true
+        }
+        Text{
+            id: servo6Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: ""
+        }
+    }
+    Rectangle{
+        id: servo8Indicator
+        anchors.top: servo6Indicator.bottom
+        anchors.right: parent.right
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "PLUSE 2"
+            font.bold: true
+        }
+        Text{
+            id: servo8Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: ""
+        }
+    }
+    Rectangle{
+        id: button2Indicator
+        anchors.bottom: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "SERVO 2"
+            font.bold: true
+        }
+        Text{
+            id: button2Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "Close"
+        }
+    }
+    Rectangle{
+        id: button1Indicator
+        anchors.bottom: button2Indicator.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "SERVO 1"
+            font.bold: true
+        }
+        Text{
+            id: button1Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "Close"
+        }
+    }
 }
