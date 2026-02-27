@@ -109,12 +109,12 @@ Rectangle {
     // }
     Rectangle {
         id: messageBox
-        anchors.margins: 5
+        anchors.margins: parent.height/6
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left
-        width:          parent.width*2/5
-        color:          Qt.darker(qgcPal.window, 1.4)
+        width:          parent.width*3/8
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
 
 
         function formatMessage(message) {
@@ -194,46 +194,68 @@ Rectangle {
             visible:                currentToolbar === flyViewToolbar
         }
 
-        QGCButton {
-            id:                 disconnectButton
-            text:               qsTr("Disconnect")
-            Layout.preferredHeight: viewButtonRow.height
-            onClicked:          _activeVehicle.closeVehicle()
-            visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
-        }
+
     }
 
-    QGCFlickable {
-        id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.left:           viewButtonRow.right
-        anchors.bottomMargin:   1
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.right:          moreOption.left
-        anchors.rightMargin:    2
-        contentWidth:           indicatorLoader.width
-        flickableDirection:     Flickable.HorizontalFlick
+    // QGCFlickable {
+    //     id:                     toolsFlickable
+    //     anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+    //     anchors.left:           viewButtonRow.right
+    //     anchors.bottomMargin:   1
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     anchors.right:          parent.right
+    //     anchors.rightMargin:    2
 
-        Loader {
-            id:                 indicatorLoader
-            anchors.right:       parent.right
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            source:             currentToolbar === flyViewToolbar ?
-                                    "qrc:/toolbar/MainToolBarIndicators.qml" :
-                                    (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
-        }
+    //     contentWidth:           indicatorLoader.implicitWidth
+    //     contentHeight:          height
+    //     flickableDirection:     Flickable.HorizontalFlick
+    //     Loader {
+    //         id:                 indicatorLoader
+    //         anchors.top:        parent.top
+    //         anchors.bottom:     parent.bottom
+    //         anchors.margins:    5
+    //         source:             currentToolbar === flyViewToolbar ?
+    //                                 "qrc:/toolbar/MainToolBarIndicators.qml" :
+    //                                 (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
+    //     }
+    // }
+    QGCButton {
+        id:                 disconnectButton
+        anchors.right:      indicatorLoader.left
+        anchors.rightMargin: 15
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        anchors.margins:    5
+        text:               qsTr("Disconnect")
+        Layout.preferredHeight: viewButtonRow.height
+        onClicked:          _activeVehicle.closeVehicle()
+        visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
     }
+    Loader {
+        id:                 indicatorLoader
+        anchors.right:      moreOption.left
+        anchors.rightMargin: 15
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        anchors.margins:    5
+        source:             "qrc:/toolbar/MainToolBarIndicators.qml"
+        visible:            currentToolbar === flyViewToolbar
+    }
+
     Rectangle {
         id: moreOption
         anchors.top:   parent.top
         anchors.right:  parent.right
         anchors.bottom: parent.bottom
+        anchors.margins: 3
         width: parent.height
+        visible:            currentToolbar === flyViewToolbar
         Image{
-            anchors.fill: parent
-            source:  "qrc:/resources/Z113/settingsbar.png"
+            anchors.centerIn: parent
+            height: parent.height/2
+            width: height
+            source:  "qrc:/res/gear-black.svg"
         }
         color:          "transparent"
         MouseArea{

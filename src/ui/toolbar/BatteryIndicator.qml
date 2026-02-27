@@ -82,7 +82,7 @@ Item {
                 else if (battery.voltage.rawValue >= 26.7){
                     return "100%"
                 }
-                return ((battery.voltage.rawValue-21)/5.7*100).toFixed(2).toString()+ "%"
+                return ((battery.voltage.rawValue-21)/5.7*100).toFixed(0).toString()+ "%"
             }
             // function getBatteryPercentageText() {
             //     if (!isNaN(battery.percentRemaining.rawValue)) {
@@ -100,31 +100,38 @@ Item {
             // }
             Rectangle{
                 id: batteryRect
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                //height: _root.height/2
+                anchors.verticalCenter: parent.verticalCenter
+                height: _root.height/2
                 width: height*2.5
-                color: "transparent"
+                color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
 
-                border.width: 2
-                border.color: "black"//qgcPal.text
+                border.width: 3
+                border.color: qgcPal.text
 
                 Rectangle{
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.margins: 2
+                    anchors.margins: 3
                     width: Math.round((battery.voltage.rawValue-21)/5.7*(batteryRect.width-4))
-                    color: "green"
-
+                    color: Qt.lighter("green", 1.5)
                 }
                 Text{
                     text:getBatteryPercentageText()
                     anchors.centerIn: parent
-                    color: "black"
+                    color: qgcPal.text
                     font.pointSize: 10
                 }
+                Rectangle{
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height/2
+                    width: height/3
+                    color: qgcPal.text
+                }
             }
+
+
             // QGCColoredImage {
             //     anchors.top:        parent.top
             //     anchors.bottom:     parent.bottom

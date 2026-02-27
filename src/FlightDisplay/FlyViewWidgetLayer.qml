@@ -55,6 +55,14 @@ Item {
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
     property int iconLeftMargin: toolStrip.width + toolStrip.anchors.leftMargin
+    MainToolBar{
+        id: toolbar
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
+        height: parent.height/12
+        color:           Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    }
 
     QGCToolInsets {
         id: _totalToolInsets
@@ -340,7 +348,7 @@ Item {
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
         color: "white"
-        anchors.top: parent.top
+        anchors.top: toolbar.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
@@ -374,7 +382,7 @@ Item {
         id: resultRectangle    
         width: resultLabel.width + resultLabel.width * 0.4
         height: resultLabel.height + resultLabel.height * 0.4
-        anchors.top: parent.top
+        anchors.top: toolbar.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
         color: "white"
@@ -430,7 +438,7 @@ Item {
         id: is_recording
         width: recordingLabel.width + recordingLabel.width * 0.4
         height: recordingLabel.height + recordingLabel.height * 0.4
-        anchors.top: parent.top
+        anchors.top: toolbar.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
         color: "white"

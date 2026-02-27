@@ -34,62 +34,62 @@ ApplicationWindow {
     property SiYiCamera siYiCamera: SiYi.camera
 
 
-    MAVLinkInspectorController {
-        id: controller
-    }
-    property var    curSystem:          controller ? controller.activeSystem : null
-    property var    button_state    //curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
-    function findButtonMessage(){
+    // MAVLinkInspectorController {
+    //     id: controller
+    // }
+    // property var    curSystem:          controller ? controller.activeSystem : null
+    // property var    button_state    //curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
+    // function findButtonMessage(){
 
-        for (var i=0; i< controller.systemNames.length; ++i){
-            var sysName = controller.systemNames.get(i)
-            //var sysName = controller.systemNames[i]
-            if (sysName === "BUTTON_CHANGED"){
-                return 1
-            }
-        }
-        return 0
-    }
-    function findButtonState(){
-        for (var i=0; i< controller.systemNames.length; ++i){
-            var sysName = controller.systemNames.get(i)
-            //var sysName = controller.systemNames[i]
-            if (sysName === "BUTTON_CHANGED"){
-                var msg = curSystem.messages.get(i)
-                for(let field of msg.fields){
-                    if (field.name ==="state"){
-                        return fields.value
-                    }
-                }
-            }
-        }
-        return "No state"
-    }
+    //     for (var i=0; i< controller.systemNames.length; ++i){
+    //         var sysName = controller.systemNames.get(i)
+    //         //var sysName = controller.systemNames[i]
+    //         if (sysName === "BUTTON_CHANGED"){
+    //             return 1
+    //         }
+    //     }
+    //     return 0
+    // }
+    // function findButtonState(){
+    //     for (var i=0; i< controller.systemNames.length; ++i){
+    //         var sysName = controller.systemNames.get(i)
+    //         //var sysName = controller.systemNames[i]
+    //         if (sysName === "BUTTON_CHANGED"){
+    //             var msg = curSystem.messages.get(i)
+    //             for(let field of msg.fields){
+    //                 if (field.name ==="state"){
+    //                     return fields.value
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return "No state"
+    // }
 
-    Rectangle{
-        id: greenBt
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        width: 500
-        height: 500
-        radius: 25
-        visible: true
-        color: "blue"
-        Text{
-            id: btState
-            font.pixelSize: 48
-            anchors.centerIn: parent
-            color: "black"
-        }
+    // Rectangle{
+    //     id: greenBt
+    //     anchors.right: parent.right
+    //     anchors.bottom: parent.bottom
+    //     width: 500
+    //     height: 500
+    //     radius: 25
+    //     visible: true
+    //     color: "blue"
+    //     Text{
+    //         id: btState
+    //         font.pixelSize: 48
+    //         anchors.centerIn: parent
+    //         color: "black"
+    //     }
 
-        Connections {
-            target: controller
-            onActiveSystemChanged: {
-                greenBt.color = findButtonMessage() ? "green" : "red"
-                btState.text = findButtonState()
-            }
-        }
-    }
+    //     Connections {
+    //         target: controller
+    //         onActiveSystemChanged: {
+    //             greenBt.color = findButtonMessage() ? "green" : "red"
+    //             btState.text = findButtonState()
+    //         }
+    //     }
+    // }
 
 
     Component.onCompleted: {
@@ -393,8 +393,8 @@ ApplicationWindow {
     /// Toolbar
     header: MainToolBar {
         id:         toolbar
-        height:     ScreenTools.toolbarHeight*0.4 //planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight*0.9
-        visible:    !QGroundControl.videoManager.fullScreen
+        height:     ScreenTools.toolbarHeight //planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight*0.9
+        visible:    planView.visible //!QGroundControl.videoManager.fullScreen
     }
 
     footer: LogReplayStatusBar {
@@ -810,6 +810,7 @@ ApplicationWindow {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        background: null
         GeneralSettings{
             anchors.fill: parent
         }
