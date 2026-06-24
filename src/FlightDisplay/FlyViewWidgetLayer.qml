@@ -32,6 +32,7 @@ import QGroundControl.ScreenTools 1.0
 import QGroundControl.Vehicle 1.0
 
 import SiYi.Object 1.0
+import Viewpro.Camera 1.0
 import "qrc:/qml/QGroundControl/Controls"
 
 // This is the ui overlay layer for the widgets/tools for Fly View
@@ -477,6 +478,8 @@ Item {
         //servoMsg = null
     }
     function findServoValue(){
+        if (!curSystem || !curSystem.messages)
+            return
         var servoMsg = curSystem.messages.get(curSystem.selected)
         for (var j = 0; j< servoMsg.fields.count; ++j){
             var field = servoMsg.fields.get(j)
@@ -513,6 +516,8 @@ Item {
         }
     }
     function findButtonState(){
+        if (!curSystem || !curSystem.messages)
+            return
         var buttonMsg = curSystem.messages.get(curSystem.selected)
         for (var j = 0; j< buttonMsg.fields.count; ++j){
             var field = buttonMsg.fields.get(j)
@@ -551,9 +556,38 @@ Item {
         }
     }
     Rectangle{
-        id: servo6Indicator
-        anchors.top: parent.verticalCenter
+        id: servo8Indicator
+        anchors.top: parent.top
         anchors.right: parent.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 20
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "PLUSE 2"
+            font.bold: true
+        }
+        Text{
+            id: servo8Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: ""
+        }
+    }
+    Rectangle{
+        id: servo6Indicator
+        anchors.top: parent.top
+        anchors.right: servo8Indicator.left
         anchors.margins: 10
         width: 100
         height: 100
@@ -579,37 +613,9 @@ Item {
         }
     }
     Rectangle{
-        id: servo8Indicator
-        anchors.top: servo6Indicator.bottom
-        anchors.right: parent.right
-        anchors.margins: 10
-        width: 100
-        height: 100
-        radius: 10
-        color: "green"
-        Text{
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "PLUSE 2"
-            font.bold: true
-        }
-        Text{
-            id: servo8Value
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: ""
-        }
-    }
-    Rectangle{
         id: button2Indicator
-        anchors.bottom: parent.verticalCenter
-        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.right: servo6Indicator.left
         anchors.margins: 10
         width: 100
         height: 100
@@ -636,8 +642,8 @@ Item {
     }
     Rectangle{
         id: button1Indicator
-        anchors.bottom: button2Indicator.top
-        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.right: button2Indicator.left
         anchors.margins: 10
         width: 100
         height: 100
@@ -662,4 +668,280 @@ Item {
             text: "Close"
         }
     }
+
+
+    Rectangle{
+        id: gimbalcontrol
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.margins: 10
+        width: 250 ; height: 600 ; radius: 10
+        color: Qt.rgba(240, 128, 128, 0.2)
+        property bool isConnected: false
+        // property color btcolor: Qt.rgba(240, 128, 128, 0.7)
+        Rectangle{
+            anchors.bottom: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.margins: 10
+            height: width
+            radius: width/2
+            color: Qt.rgba(240, 128, 128, 0.7)
+            Rectangle{
+                id: homeBt
+                anchors.centerIn: parent
+                width: 100
+                height: width
+                radius: width/2
+                color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) :  Qt.rgba(240, 128, 128, 0.7)
+                border.width: 20
+                border.color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.2)
+                Image{
+                    anchors.centerIn: parent
+                    width: parent.width/2
+                    height: width
+                    source: "qrc:/resources/SiYi/center.png"
+                    fillMode: Image.PreserveAspectFit
+                }
+                MouseArea{
+                    id: homeMA
+                    anchors.fill: parent
+                    onClicked: ViewproCamera.home()
+                }
+            }
+            Image{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: homeBt.left
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnleft()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.left: homeBt.right
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-right.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnright()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.bottom: homeBt.top
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-up.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnup()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.top: homeBt.bottom
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-down.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turndown()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id: connect
+            anchors.top: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            width: 200 ; height: 50 ; radius: 10
+            color: connectMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            Text{
+                id: connectLabel
+                anchors.centerIn: parent
+                text: "Connect"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: connectMA
+                anchors.fill: parent
+                onClicked: {
+                    if (connectLabel.text === "Connect"){
+                        if (ViewproCamera.connectCamera()){
+                            connectLabel.text = "Disconnect"
+                        }
+                    }
+                    else {
+                        ViewproCamera.closeCamera()
+                        connectLabel.text = "Connect"
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id: track
+            anchors.top: connect.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            width: 200 ; height: 50 ; radius: 10
+            color: trackMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            Text{
+                id: trackLabel
+                anchors.centerIn: parent
+                text: "Track"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: trackMA
+                anchors.fill: parent
+                onClicked: {
+                    if (trackLabel.text === "Track"){
+                        ViewproCamera.starttrack()
+                        trackLabel.text = "Stop"
+                    }
+                    else {
+                        ViewproCamera.stoptrack()
+                        trackLabel.text = "Track"
+                    }
+                }
+
+            }
+        }
+        Rectangle{
+            id: gimbaldown
+            anchors.top: track.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            width: 200 ; height: 50 ; radius: 10
+            color: down90MA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            Text{
+                anchors.centerIn: parent
+                text: "Gimbal Down"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: down90MA
+                anchors.fill: parent
+                onClicked: ViewproCamera.down90()
+            }
+        }
+        Slider {
+            id: speedSlider
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: 10
+            orientation: Qt.Horizontal
+            from: 1 ; to: 20 ; value: ViewproCamera.getSpeed(); stepSize:1
+            background: Rectangle {
+                x: speedSlider.leftPadding
+                y: speedSlider.height / 2 - height / 2
+                width: speedSlider.availableWidth
+                height: 10 ; radius: 4
+                Rectangle {
+                    width: speedSlider.visualPosition * parent.width
+                    height: parent.height
+                    radius: parent.radius
+                    color: Qt.rgba(240, 128, 128, 0.7)
+                }
+            }
+            handle: Rectangle {
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: width / 2
+                color: Qt.rgba(240, 128, 128, 0.7)
+                x: speedSlider.leftPadding +
+                   speedSlider.visualPosition *
+                   (speedSlider.availableWidth - width)
+                y: speedSlider.height / 2 - height / 2
+                Text {
+                    anchors.centerIn: parent
+                    text: Math.round(speedSlider.value)
+                    font.pixelSize: 12
+                }
+            }
+            onValueChanged: ViewproCamera.setSpeed(speedSlider.value)
+        }
+        Slider {
+            id: zoomSlider
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: 20
+            orientation: Qt.Horizontal
+            from: 1 ; to: 36 ; value: ViewproCamera.getMultiple(); stepSize:1
+            background: Rectangle {
+                x: zoomSlider.leftPadding
+                y: zoomSlider.height / 2 - height / 2
+                width: zoomSlider.availableWidth
+                height: 10 ; radius: 4
+                Rectangle {
+                    width: zoomSlider.visualPosition * parent.width
+                    height: parent.height
+                    radius: parent.radius
+                }
+            }
+            handle: Rectangle {
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: width / 2
+                color: Qt.rgba(240, 128, 128, 0.7)
+                x: zoomSlider.leftPadding +
+                   zoomSlider.visualPosition *
+                   (zoomSlider.availableWidth - width)
+                y: zoomSlider.height / 2 - height / 2
+                Text {
+                    anchors.centerIn: parent
+                    text: Math.round(zoomSlider.value)
+                    font.pixelSize: 12
+                }
+            }
+            onValueChanged: {
+                ViewproCamera.setMultiple(zoomSlider.value)
+                ViewproCamera.zoom()
+            }
+        }
+        Text{
+            id: zoomLabel
+            anchors.bottom: zoomSlider.top
+            anchors.horizontalCenter: zoomSlider.horizontalCenter
+            text: "Zoom"
+            font.pixelSize: 24
+            font.bold: true
+            font.italic: true
+        }
+    }
+
 }

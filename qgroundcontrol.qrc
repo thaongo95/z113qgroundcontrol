@@ -397,6 +397,13 @@
         <file>resources/SiYi/NavGreen.svg</file>
         <file>resources/SiYi/AiRed.svg</file>
         <file>resources/SiYi/+.svg</file>
+        <file>resources/SiYi/point.png</file>
+        <file>resources/SiYi/arrowheads.png</file>
+        <file>resources/SiYi/arrowheads-down.png</file>
+        <file>resources/SiYi/arrowheads-right.png</file>
+        <file>resources/SiYi/arrowheads-up.png</file>
+        <file>resources/SiYi/arrow.png</file>
+        <file>resources/SiYi/center.png</file>
     </qresource>
     <qresource prefix="/qm"/>
     <qresource prefix="/q"/>
