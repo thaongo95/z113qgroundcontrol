@@ -106,6 +106,7 @@
 #include "SiYi/ViewproCamera.h"
 #include "ButtonChangeState.h"
 
+
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
 #endif
@@ -542,7 +543,6 @@ void QGCApplication::_initCommon()
     });
     qmlRegisterUncreatableType<SiYiCamera>("SiYi.Object", 1, 0, "SiYiCamera", kRefOnly);
     qmlRegisterUncreatableType<SiYiTransmitter>("SiYi.Object", 1, 0, "SiYiTransmitter", kRefOnly);
-
     qmlRegisterType<ButtonMonitor>("ButtonChangeState", 1, 0, "ButtonMonitor");
     qmlRegisterSingletonType<ViewproCamera>("Viewpro.Camera",1,0,"ViewproCamera",[](QQmlEngine *, QJSEngine *) -> QObject*{
             return ViewproCamera::instance();

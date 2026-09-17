@@ -56,6 +56,7 @@ Item {
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
+
     property int iconLeftMargin: toolStrip.width + toolStrip.anchors.leftMargin
 
     QGCToolInsets {
@@ -128,6 +129,9 @@ Item {
         anchors.bottom: telemetryPanel.top
         anchors.bottomMargin: 10
         anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        // anchors.right: parent.right
+        // anchors.top: servo8Indicator.bottom
+        // anchors.margins: 10
         width: _rightPanelWidth
         spacing: _toolsMargin
         visible: SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
@@ -540,9 +544,16 @@ Item {
                     button1Indicator.color = "red"
                     button2Indicator.color = "red"
                 }
+                else if (field.value === "1" ){
+                    button1Value.text = "Close"
+                    button2Value.text = "Open"
+                    button1Indicator.color = "green"
+                    button2Indicator.color = "red"
+                }
             }
         }
     }
+
     Timer {
         id: updateTimer
         interval: 200
@@ -571,7 +582,7 @@ Item {
             anchors.topMargin: 15
             font.pixelSize: 24
             color: "black"
-            text: "PLUSE 2"
+            text: "PULSE 2"
             font.bold: true
         }
         Text{
@@ -599,7 +610,7 @@ Item {
             anchors.topMargin: 15
             font.pixelSize: 24
             color: "black"
-            text: "PLUSE 1"
+            text: "PULSE 1"
             font.bold: true
         }
         Text{
@@ -675,15 +686,54 @@ Item {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 10
-        width: 250 ; height: 600 ; radius: 10
+        width: 300 ; height: 800 ; radius: 10
         color: Qt.rgba(240, 128, 128, 0.2)
         property bool isConnected: false
+        visible: false
         // property color btcolor: Qt.rgba(240, 128, 128, 0.7)
+        Slider {
+            id: speedSlider
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 10
+            orientation: Qt.Horizontal
+            from: 1 ; to: 20 ; value: ViewproCamera.getSpeed(); stepSize:1
+            background: Rectangle {
+                x: speedSlider.leftPadding
+                y: speedSlider.height / 2 - height / 2
+                width: speedSlider.availableWidth
+                height: 10 ; radius: 4
+                Rectangle {
+                    width: speedSlider.visualPosition * parent.width
+                    height: parent.height
+                    radius: parent.radius
+                    color: Qt.rgba(240, 128, 128, 0.7)
+                }
+            }
+            handle: Rectangle {
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: width / 2
+                color: Qt.rgba(240, 128, 128, 0.7)
+                x: speedSlider.leftPadding +
+                   speedSlider.visualPosition *
+                   (speedSlider.availableWidth - width)
+                y: speedSlider.height / 2 - height / 2
+                Text {
+                    anchors.centerIn: parent
+                    text: Math.round(speedSlider.value)
+                    font.pixelSize: 12
+                }
+            }
+            onValueChanged: ViewproCamera.setSpeed(speedSlider.value)
+        }
         Rectangle{
-            anchors.bottom: parent.verticalCenter
+            anchors.bottom: connect.top
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.margins: 10
+            anchors.bottomMargin: 30
             height: width
             radius: width/2
             color: Qt.rgba(240, 128, 128, 0.7)
@@ -694,7 +744,7 @@ Item {
                 height: width
                 radius: width/2
                 color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) :  Qt.rgba(240, 128, 128, 0.7)
-                border.width: 20
+                border.width: 10
                 border.color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.2)
                 Image{
                     anchors.centerIn: parent
@@ -780,11 +830,9 @@ Item {
         }
         Rectangle{
             id: connect
-            anchors.top: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            width: 200 ; height: 50 ; radius: 10
-            color: connectMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            anchors.centerIn: parent
+            width: 250 ; height: 60 ; radius: 30
+            color: connectMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : (connectLabel.text === "Disconnect" ? Qt.rgba(0, 255, 0, 0.7) : Qt.rgba(240, 128, 128, 0.7))
             Text{
                 id: connectLabel
                 anchors.centerIn: parent
@@ -799,11 +847,13 @@ Item {
                     if (connectLabel.text === "Connect"){
                         if (ViewproCamera.connectCamera()){
                             connectLabel.text = "Disconnect"
+                            gimbalcontrol.isConnected = true
                         }
                     }
                     else {
                         ViewproCamera.closeCamera()
                         connectLabel.text = "Connect"
+                        gimbalcontrol.isConnected = false
                     }
                 }
             }
@@ -812,8 +862,8 @@ Item {
             id: track
             anchors.top: connect.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            width: 200 ; height: 50 ; radius: 10
+            anchors.topMargin: 30
+            width: 200 ; height: 50 ; radius: 25
             color: trackMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
             Text{
                 id: trackLabel
@@ -842,12 +892,12 @@ Item {
             id: gimbaldown
             anchors.top: track.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            width: 200 ; height: 50 ; radius: 10
+            anchors.topMargin: 20
+            width: 200 ; height: 50 ; radius: 25
             color: down90MA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
             Text{
                 anchors.centerIn: parent
-                text: "Gimbal Down"
+                text: "Nadir"
                 font.pixelSize: 24
                 font.bold: true
             }
@@ -857,49 +907,14 @@ Item {
                 onClicked: ViewproCamera.down90()
             }
         }
-        Slider {
-            id: speedSlider
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 10
-            orientation: Qt.Horizontal
-            from: 1 ; to: 20 ; value: ViewproCamera.getSpeed(); stepSize:1
-            background: Rectangle {
-                x: speedSlider.leftPadding
-                y: speedSlider.height / 2 - height / 2
-                width: speedSlider.availableWidth
-                height: 10 ; radius: 4
-                Rectangle {
-                    width: speedSlider.visualPosition * parent.width
-                    height: parent.height
-                    radius: parent.radius
-                    color: Qt.rgba(240, 128, 128, 0.7)
-                }
-            }
-            handle: Rectangle {
-                implicitWidth: 30
-                implicitHeight: 30
-                radius: width / 2
-                color: Qt.rgba(240, 128, 128, 0.7)
-                x: speedSlider.leftPadding +
-                   speedSlider.visualPosition *
-                   (speedSlider.availableWidth - width)
-                y: speedSlider.height / 2 - height / 2
-                Text {
-                    anchors.centerIn: parent
-                    text: Math.round(speedSlider.value)
-                    font.pixelSize: 12
-                }
-            }
-            onValueChanged: ViewproCamera.setSpeed(speedSlider.value)
-        }
+
         Slider {
             id: zoomSlider
-            anchors.bottom: parent.bottom
+            anchors.top: gimbaldown.bottom
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.topMargin: 20
+            anchors.margins: 20
+            anchors.topMargin: 30
             orientation: Qt.Horizontal
             from: 1 ; to: 36 ; value: ViewproCamera.getMultiple(); stepSize:1
             background: Rectangle {
@@ -933,15 +948,66 @@ Item {
                 ViewproCamera.zoom()
             }
         }
-        Text{
-            id: zoomLabel
-            anchors.bottom: zoomSlider.top
-            anchors.horizontalCenter: zoomSlider.horizontalCenter
-            text: "Zoom"
-            font.pixelSize: 24
-            font.bold: true
-            font.italic: true
+        Rectangle{
+            id: zoomBt
+            anchors.top: zoomSlider.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 10
+            width: 250 ; height: 50 ; radius: 25
+            color:  Qt.rgba(240, 128, 128, 0.2)
+            Text{
+                anchors.centerIn: parent
+                text: "Zoom"
+                font.pixelSize: 24
+                font.bold: true
+                font.italic: true
+            }
+            Rectangle{
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height ; radius: height/2
+                color: decrease.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+                Text{
+                    anchors.centerIn: parent
+                    text: "-"
+                    font.pixelSize: 32
+                    font.bold: true
+                }
+                MouseArea{
+                    id: decrease
+                    anchors.fill: parent
+                    onClicked: zoomSlider.value = (zoomSlider !==0) ? zoomSlider.value-1 : zoomSlider.value
+                }
+            }
+            Rectangle{
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height ; radius: height/2
+                color: increase.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+                Text{
+                    anchors.centerIn: parent
+                    text: "+"
+                    font.pixelSize: 32
+                    font.bold: true
+                }
+                MouseArea{
+                    id: increase
+                    anchors.fill: parent
+                    onClicked: zoomSlider.value = (zoomSlider !==36) ? zoomSlider.value+1 : zoomSlider.value
+                }
+            }
+        }
+        Image{
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.margins: 5
+            width: 80; height: 80
+            source: "qrc:/resources/SiYi/logo_lightcoral.png"
+            fillMode: Image.PreserveAspectFit
         }
     }
+
 
 }

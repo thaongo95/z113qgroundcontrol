@@ -76,13 +76,24 @@ Item {
                 }
             }
             function getBatteryPercentageText() {
-                if (battery.voltage.rawValue <= 21){
-                    return "0%"
+                if (battery.voltage.rawValue <= 26.7){
+                    if (battery.voltage.rawValue <= 21){
+                        return "0%"
+                    }
+                    else if (battery.voltage.rawValue >= 26.7){
+                        return "100%"
+                    }
+                    return ((battery.voltage.rawValue-21)/5.7*100).toFixed(0).toString()+ "%"
                 }
-                else if (battery.voltage.rawValue >= 26.7){
-                    return "100%"
+                else if (battery.voltage.rawValue >= 40.2){
+                    if (battery.voltage.rawValue <= 42.6){
+                        return "0%"
+                    }
+                    else if (battery.voltage.rawValue >= 53){
+                        return "100%"
+                    }
+                    return ((battery.voltage.rawValue-42.6)/10.8*100).toFixed(0).toString()+ "%"
                 }
-                return ((battery.voltage.rawValue-21)/5.7*100).toFixed(2).toString()+ "%"
             }
             // function getBatteryPercentageText() {
             //     if (!isNaN(battery.percentRemaining.rawValue)) {

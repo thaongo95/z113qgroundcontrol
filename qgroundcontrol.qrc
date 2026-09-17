@@ -404,6 +404,8 @@
         <file>resources/SiYi/arrowheads-up.png</file>
         <file>resources/SiYi/arrow.png</file>
         <file>resources/SiYi/center.png</file>
+        <file>resources/SiYi/Z36T.png</file>
+        <file>resources/SiYi/logo_lightcoral.png</file>
     </qresource>
     <qresource prefix="/qm"/>
     <qresource prefix="/q"/>
