@@ -6,7 +6,7 @@
 #include "SiYiCamera.h"
 
 SiYiCamera::SiYiCamera(QObject *parent)
-    : SiYiTcpClient("192.168.144.25:8554/main.264", 37256)   //37256
+    : SiYiTcpClient("192.168.144.60", 37256)   //37256
 {
     m_laserTimer = new QTimer(this);
     m_laserTimer->setInterval(1000);

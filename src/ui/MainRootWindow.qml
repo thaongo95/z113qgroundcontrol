@@ -16,11 +16,13 @@ import QtQuick.Window   2.11
 import QGroundControl               1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.Controls      1.0
+import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
 
 import SiYi.Object 1.0
+import ButtonChangeState 1.0
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
@@ -31,6 +33,9 @@ ApplicationWindow {
     visible:        true
 
     property SiYiCamera siYiCamera: SiYi.camera
+
+    
+
 
     Component.onCompleted: {
         //-- Full screen on mobile or tiny screens
@@ -333,7 +338,7 @@ ApplicationWindow {
     /// Toolbar
     header: MainToolBar {
         id:         toolbar
-        height:     ScreenTools.toolbarHeight
+        height:     planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight
         visible:    !QGroundControl.videoManager.fullScreen
     }
 

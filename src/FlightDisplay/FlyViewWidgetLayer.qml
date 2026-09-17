@@ -32,6 +32,7 @@ import QGroundControl.ScreenTools 1.0
 import QGroundControl.Vehicle 1.0
 
 import SiYi.Object 1.0
+import Viewpro.Camera 1.0
 import "qrc:/qml/QGroundControl/Controls"
 
 // This is the ui overlay layer for the widgets/tools for Fly View
@@ -55,6 +56,7 @@ Item {
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
+
     property int iconLeftMargin: toolStrip.width + toolStrip.anchors.leftMargin
 
     QGCToolInsets {
@@ -120,10 +122,16 @@ Item {
 
     FlyViewInstrumentPanel {
         id: instrumentPanel
-        anchors.margins: _toolsMargin
-        //anchors.topMargin: anchors.margins + SiYi.iconsHeight
-        anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.right: parent.right
+        // anchors.margins: _toolsMargin
+        // //anchors.topMargin: anchors.margins + SiYi.iconsHeight
+        // anchors.top: multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        // anchors.right: parent.right
+        anchors.bottom: telemetryPanel.top
+        anchors.bottomMargin: 10
+        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        // anchors.right: parent.right
+        // anchors.top: servo8Indicator.bottom
+        // anchors.margins: 10
         width: _rightPanelWidth
         spacing: _toolsMargin
         visible: SiYi.hideWidgets ? false : QGroundControl.corePlugin.options.flyView.showInstrumentPanel
@@ -164,20 +172,21 @@ Item {
 
     Rectangle {
         id: zoomMultipleRectangle
-        anchors.bottom: telemetryPanel.top
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
         color: "white"
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         visible: false
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
         radius: 5
         QGCLabel {
             id: zoomMultipleLabel
             text: (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
             anchors.centerIn: parent
             color: "black"
-            font.pixelSize: 48
+            font.pixelSize: 28
 
             Timer {
                 id: visibleTimer
@@ -198,12 +207,13 @@ Item {
     }
 
     Rectangle {
-        id: resultRectangle
-        anchors.bottom: telemetryPanel.top
+        id: resultRectangle    
         width: resultLabel.width + resultLabel.width * 0.4
         height: resultLabel.height + resultLabel.height * 0.4
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         color: "white"
         visible: false
         radius: 5
@@ -211,7 +221,7 @@ Item {
             id: resultLabel
             anchors.centerIn: parent
             color: "black"
-            font.pixelSize: 48
+            font.pixelSize: 28
 
             Timer {
                 id: resultTimer
@@ -255,11 +265,12 @@ Item {
     // cho them hien thi quay video
     Rectangle {
         id: is_recording
-        anchors.bottom: telemetryPanel.top
         width: recordingLabel.width + recordingLabel.width * 0.4
         height: recordingLabel.height + recordingLabel.height * 0.4
+        anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         color: "white"
         visible: false
         radius: 5
@@ -268,7 +279,7 @@ Item {
             id: recordingLabel
             anchors.centerIn: parent
             color: "red"
-            font.pixelSize: 48
+            font.pixelSize: 28
             text: getTime(is_recording.secondCount)
 
             function getTime(time){
@@ -278,7 +289,7 @@ Item {
                 function get_string(n){
                     return n>=10 ? n.toString() : '0' + n
                 }
-                return "Đang quay phim " + get_string(hours) + ":" + get_string(minutes) + ":" + get_string(seconds)
+                return "Ghi hình " + get_string(hours) + ":" + get_string(minutes) + ":" + get_string(seconds)
             }
 
             Timer {
@@ -312,72 +323,75 @@ Item {
     }
     TelemetryValuesBar {
         id: telemetryPanel
-        x: recalcXPosition()
+        // x: recalcXPosition()
         anchors.margins: _toolsMargin
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         visible: !SiYi.hideWidgets
 
         // States for custom layout support
-        states: [
-            State {
-                name: "bottom"
-                when: telemetryPanel.bottomMode
+        // states: [
+        //     State {
+        //         name: "bottom"
+        //         when: telemetryPanel.bottomMode
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: parent.bottom
-                    anchors.right: undefined
-                    anchors.verticalCenter: undefined
-                }
+        //         AnchorChanges {
+        //             target: telemetryPanel
+        //             anchors.top: undefined
+        //             anchors.bottom: parent.bottom
+        //             anchors.right: undefined
+        //             anchors.verticalCenter: undefined
+        //         }
 
-                PropertyChanges {
-                    target: telemetryPanel
-                    x: recalcXPosition()
-                }
-            },
+        //         PropertyChanges {
+        //             target: telemetryPanel
+        //             x: recalcXPosition()
+        //         }
+        //     }
+            // ,
 
-            State {
-                name: "right-video"
-                when: !telemetryPanel.bottomMode && photoVideoControl.visible
+            // State {
+            //     name: "right-video"
+            //     when: !telemetryPanel.bottomMode && photoVideoControl.visible
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: photoVideoControl.bottom
-                    anchors.bottom: undefined
-                    anchors.right: parent.right
-                    anchors.verticalCenter: undefined
-                }
-            },
+            //     AnchorChanges {
+            //         target: telemetryPanel
+            //         anchors.top: photoVideoControl.bottom
+            //         anchors.bottom: undefined
+            //         anchors.right: parent.right
+            //         anchors.verticalCenter: undefined
+            //     }
+            // },
 
-            State {
-                name: "right-novideo"
-                when: !telemetryPanel.bottomMode && !photoVideoControl.visible
+            // State {
+            //     name: "right-novideo"
+            //     when: !telemetryPanel.bottomMode && !photoVideoControl.visible
 
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: undefined
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-        ]
+            //     AnchorChanges {
+            //         target: telemetryPanel
+            //         anchors.top: undefined
+            //         anchors.bottom: undefined
+            //         anchors.right: parent.right
+            //         anchors.verticalCenter: parent.verticalCenter
+            //     }
+            // }
+        // ]
 
-        function recalcXPosition() {
-            // First try centered
-            var halfRootWidth = _root.width / 2
-            var halfPanelWidth = telemetryPanel.width / 2
-            var leftX = (halfRootWidth - halfPanelWidth) - _toolsMargin
-            var rightX = (halfRootWidth + halfPanelWidth) + _toolsMargin
-            if (leftX >= parentToolInsets.leftEdgeBottomInset
-                    || rightX <= parentToolInsets.rightEdgeBottomInset) {
-                // It will fit in the horizontalCenter
-                return halfRootWidth - halfPanelWidth
-            } else {
-                // Anchor to left edge
-                return parentToolInsets.leftEdgeBottomInset + _toolsMargin
-            }
-        }
+        // function recalcXPosition() {
+        //     // First try centered
+        //     var halfRootWidth = _root.width / 2
+        //     var halfPanelWidth = telemetryPanel.width / 2
+        //     var leftX = (halfRootWidth - halfPanelWidth) - _toolsMargin
+        //     var rightX = (halfRootWidth + halfPanelWidth) + _toolsMargin
+        //     if (leftX >= parentToolInsets.leftEdgeBottomInset
+        //             || rightX <= parentToolInsets.rightEdgeBottomInset) {
+        //         // It will fit in the horizontalCenter
+        //         return halfRootWidth - halfPanelWidth
+        //     } else {
+        //         // Anchor to left edge
+        //         return parentToolInsets.leftEdgeBottomInset + _toolsMargin
+        //     }
+        // }
     }
 
     //-- Virtual Joystick
@@ -446,4 +460,554 @@ Item {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {}
     }
+    MAVLinkInspectorController {
+         id: controller
+    }
+    property var curSystem: controller ? controller.activeSystem : null
+    //property var servoMsg: null
+    property var currentMsg:  curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
+    function findServoMsg() {
+        if (!curSystem || !curSystem.messages)
+            return
+
+        for (var i = 0; i < curSystem.messages.count; ++i) {
+            var msg = curSystem.messages.get(i)
+            //console.log("           " + msg.name)
+            if (msg.name === "SERVO_OUTPUT_RAW") {
+                curSystem.selected = i
+
+                return
+            }
+        }
+        //servoMsg = null
+    }
+    function findServoValue(){
+        if (!curSystem || !curSystem.messages)
+            return
+        var servoMsg = curSystem.messages.get(curSystem.selected)
+        for (var j = 0; j< servoMsg.fields.count; ++j){
+            var field = servoMsg.fields.get(j)
+            if (field.name === "servo6_raw"){
+                console.log(field.value)
+                servo6Value.text = field.value
+                var x6 = Number(field.value)
+                if ((x6>=1850)&&(x6<=1950)) {servo6Indicator.color = "red"}
+                else if ((x6<=1150)&&(x6>=950)) {servo6Indicator.color = "#ba55d3"}
+                else {servo6Indicator.color = "green"}
+            }
+            if (field.name === "servo8_raw"){
+                console.log(field.value)
+                servo8Value.text = field.value
+                var x8 = Number(field.value)
+                if ((x8>=1850)&&(x8<=1950)) {servo8Indicator.color = "red"}
+                else if ((x8<=1150)&&(x8>=950)) {servo8Indicator.color = "#ba55d3"}
+                else {servo8Indicator.color = "green"}
+            }
+        }
+    }
+
+    function findButtonChange() {
+        if (!curSystem || !curSystem.messages)
+            return
+
+        for (var i = 0; i < curSystem.messages.count; ++i) {
+            var msg = curSystem.messages.get(i)
+            //console.log("           " + msg.name)
+            if (msg.name === "BUTTON_CHANGE") {
+                curSystem.selected = i
+                return
+            }
+        }
+    }
+    function findButtonState(){
+        if (!curSystem || !curSystem.messages)
+            return
+        var buttonMsg = curSystem.messages.get(curSystem.selected)
+        for (var j = 0; j< buttonMsg.fields.count; ++j){
+            var field = buttonMsg.fields.get(j)
+            if (field.name === "state"){
+                if (field.value === "3"){
+                    button1Value.text = "Close"
+                    button2Value.text = "Close"
+                    button1Indicator.color = "green"
+                    button2Indicator.color = "green"
+                }
+                else if (field.value === "2"){
+                    button1Value.text = "Open"
+                    button2Value.text = "Close"
+                    button1Indicator.color = "red"
+                    button2Indicator.color = "green"
+                }
+                else if (field.value === "0" ){
+                    button1Value.text = "Open"
+                    button2Value.text = "Open"
+                    button1Indicator.color = "red"
+                    button2Indicator.color = "red"
+                }
+                else if (field.value === "1" ){
+                    button1Value.text = "Close"
+                    button2Value.text = "Open"
+                    button1Indicator.color = "green"
+                    button2Indicator.color = "red"
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: updateTimer
+        interval: 200
+        running: true
+        repeat: true
+        onTriggered: {
+            findServoMsg()
+            findServoValue()
+            findButtonChange()
+            findButtonState()
+        }
+    }
+    Rectangle{
+        id: servo8Indicator
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 20
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "PULSE 2"
+            font.bold: true
+        }
+        Text{
+            id: servo8Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: ""
+        }
+    }
+    Rectangle{
+        id: servo6Indicator
+        anchors.top: parent.top
+        anchors.right: servo8Indicator.left
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "PULSE 1"
+            font.bold: true
+        }
+        Text{
+            id: servo6Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: ""
+        }
+    }
+    Rectangle{
+        id: button2Indicator
+        anchors.top: parent.top
+        anchors.right: servo6Indicator.left
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "SERVO 2"
+            font.bold: true
+        }
+        Text{
+            id: button2Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "Close"
+        }
+    }
+    Rectangle{
+        id: button1Indicator
+        anchors.top: parent.top
+        anchors.right: button2Indicator.left
+        anchors.margins: 10
+        width: 100
+        height: 100
+        radius: 10
+        color: "green"
+        Text{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "SERVO 1"
+            font.bold: true
+        }
+        Text{
+            id: button1Value
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 15
+            font.pixelSize: 24
+            color: "black"
+            text: "Close"
+        }
+    }
+
+
+    Rectangle{
+        id: gimbalcontrol
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.margins: 10
+        width: 300 ; height: 800 ; radius: 10
+        color: Qt.rgba(240, 128, 128, 0.2)
+        property bool isConnected: false
+        visible: false
+        // property color btcolor: Qt.rgba(240, 128, 128, 0.7)
+        Slider {
+            id: speedSlider
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 10
+            orientation: Qt.Horizontal
+            from: 1 ; to: 20 ; value: ViewproCamera.getSpeed(); stepSize:1
+            background: Rectangle {
+                x: speedSlider.leftPadding
+                y: speedSlider.height / 2 - height / 2
+                width: speedSlider.availableWidth
+                height: 10 ; radius: 4
+                Rectangle {
+                    width: speedSlider.visualPosition * parent.width
+                    height: parent.height
+                    radius: parent.radius
+                    color: Qt.rgba(240, 128, 128, 0.7)
+                }
+            }
+            handle: Rectangle {
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: width / 2
+                color: Qt.rgba(240, 128, 128, 0.7)
+                x: speedSlider.leftPadding +
+                   speedSlider.visualPosition *
+                   (speedSlider.availableWidth - width)
+                y: speedSlider.height / 2 - height / 2
+                Text {
+                    anchors.centerIn: parent
+                    text: Math.round(speedSlider.value)
+                    font.pixelSize: 12
+                }
+            }
+            onValueChanged: ViewproCamera.setSpeed(speedSlider.value)
+        }
+        Rectangle{
+            anchors.bottom: connect.top
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.margins: 10
+            anchors.bottomMargin: 30
+            height: width
+            radius: width/2
+            color: Qt.rgba(240, 128, 128, 0.7)
+            Rectangle{
+                id: homeBt
+                anchors.centerIn: parent
+                width: 100
+                height: width
+                radius: width/2
+                color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) :  Qt.rgba(240, 128, 128, 0.7)
+                border.width: 10
+                border.color: homeMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.2)
+                Image{
+                    anchors.centerIn: parent
+                    width: parent.width/2
+                    height: width
+                    source: "qrc:/resources/SiYi/center.png"
+                    fillMode: Image.PreserveAspectFit
+                }
+                MouseArea{
+                    id: homeMA
+                    anchors.fill: parent
+                    onClicked: ViewproCamera.home()
+                }
+            }
+            Image{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: homeBt.left
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnleft()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.left: homeBt.right
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-right.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnright()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.bottom: homeBt.top
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-up.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turnup()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+            Image{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.top: homeBt.bottom
+                anchors.margins: 15
+                source: "qrc:/resources/SiYi/arrowheads-down.png"
+                fillMode: Image.PreserveAspectFit
+                MouseArea{
+                    anchors.fill: parent
+                    onPressed: {
+                        ViewproCamera.turndown()
+                    }
+                    onReleased: {
+                        ViewproCamera.stop()
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id: connect
+            anchors.centerIn: parent
+            width: 250 ; height: 60 ; radius: 30
+            color: connectMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : (connectLabel.text === "Disconnect" ? Qt.rgba(0, 255, 0, 0.7) : Qt.rgba(240, 128, 128, 0.7))
+            Text{
+                id: connectLabel
+                anchors.centerIn: parent
+                text: "Connect"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: connectMA
+                anchors.fill: parent
+                onClicked: {
+                    if (connectLabel.text === "Connect"){
+                        if (ViewproCamera.connectCamera()){
+                            connectLabel.text = "Disconnect"
+                            gimbalcontrol.isConnected = true
+                        }
+                    }
+                    else {
+                        ViewproCamera.closeCamera()
+                        connectLabel.text = "Connect"
+                        gimbalcontrol.isConnected = false
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id: track
+            anchors.top: connect.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 30
+            width: 200 ; height: 50 ; radius: 25
+            color: trackMA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            Text{
+                id: trackLabel
+                anchors.centerIn: parent
+                text: "Track"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: trackMA
+                anchors.fill: parent
+                onClicked: {
+                    if (trackLabel.text === "Track"){
+                        ViewproCamera.starttrack()
+                        trackLabel.text = "Stop"
+                    }
+                    else {
+                        ViewproCamera.stoptrack()
+                        trackLabel.text = "Track"
+                    }
+                }
+
+            }
+        }
+        Rectangle{
+            id: gimbaldown
+            anchors.top: track.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 20
+            width: 200 ; height: 50 ; radius: 25
+            color: down90MA.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+            Text{
+                anchors.centerIn: parent
+                text: "Nadir"
+                font.pixelSize: 24
+                font.bold: true
+            }
+            MouseArea{
+                id: down90MA
+                anchors.fill: parent
+                onClicked: ViewproCamera.down90()
+            }
+        }
+
+        Slider {
+            id: zoomSlider
+            anchors.top: gimbaldown.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 20
+            anchors.topMargin: 30
+            orientation: Qt.Horizontal
+            from: 1 ; to: 36 ; value: ViewproCamera.getMultiple(); stepSize:1
+            background: Rectangle {
+                x: zoomSlider.leftPadding
+                y: zoomSlider.height / 2 - height / 2
+                width: zoomSlider.availableWidth
+                height: 10 ; radius: 4
+                Rectangle {
+                    width: zoomSlider.visualPosition * parent.width
+                    height: parent.height
+                    radius: parent.radius
+                }
+            }
+            handle: Rectangle {
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: width / 2
+                color: Qt.rgba(240, 128, 128, 0.7)
+                x: zoomSlider.leftPadding +
+                   zoomSlider.visualPosition *
+                   (zoomSlider.availableWidth - width)
+                y: zoomSlider.height / 2 - height / 2
+                Text {
+                    anchors.centerIn: parent
+                    text: Math.round(zoomSlider.value)
+                    font.pixelSize: 12
+                }
+            }
+            onValueChanged: {
+                ViewproCamera.setMultiple(zoomSlider.value)
+                ViewproCamera.zoom()
+            }
+        }
+        Rectangle{
+            id: zoomBt
+            anchors.top: zoomSlider.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 10
+            width: 250 ; height: 50 ; radius: 25
+            color:  Qt.rgba(240, 128, 128, 0.2)
+            Text{
+                anchors.centerIn: parent
+                text: "Zoom"
+                font.pixelSize: 24
+                font.bold: true
+                font.italic: true
+            }
+            Rectangle{
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height ; radius: height/2
+                color: decrease.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+                Text{
+                    anchors.centerIn: parent
+                    text: "-"
+                    font.pixelSize: 32
+                    font.bold: true
+                }
+                MouseArea{
+                    id: decrease
+                    anchors.fill: parent
+                    onClicked: zoomSlider.value = (zoomSlider !==0) ? zoomSlider.value-1 : zoomSlider.value
+                }
+            }
+            Rectangle{
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height ; radius: height/2
+                color: increase.pressed ? Qt.rgba(0, 100, 255, 0.7) : Qt.rgba(240, 128, 128, 0.7)
+                Text{
+                    anchors.centerIn: parent
+                    text: "+"
+                    font.pixelSize: 32
+                    font.bold: true
+                }
+                MouseArea{
+                    id: increase
+                    anchors.fill: parent
+                    onClicked: zoomSlider.value = (zoomSlider !==36) ? zoomSlider.value+1 : zoomSlider.value
+                }
+            }
+        }
+        Image{
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.margins: 5
+            width: 80; height: 80
+            source: "qrc:/resources/SiYi/logo_lightcoral.png"
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+
 }

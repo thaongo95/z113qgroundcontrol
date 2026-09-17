@@ -20,6 +20,7 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 
+
 AnalyzePage {
     headerComponent:    headerComponent
     pageComponent:      pageComponent
@@ -30,6 +31,7 @@ AnalyzePage {
     property int    curCompID:          0
     property real   maxButtonWidth:     0
 
+
     MAVLinkInspectorController {
         id: controller
     }
@@ -37,6 +39,7 @@ AnalyzePage {
     Component {
         id:  headerComponent
         //-- Header
+
         RowLayout {
             id:                 header
             anchors.left:       parent.left
@@ -143,7 +146,7 @@ AnalyzePage {
                             Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 20
                         }
                         QGCLabel {
-                            color:      qgcPal.buttonHighlight
+                            color:      isHasButtonChange()
                             text:       curMessage ? curMessage.name + ' (' + curMessage.id + ') ' + curMessage.messageHz.toFixed(1) + 'Hz' : ""
                         }
                         QGCLabel {
