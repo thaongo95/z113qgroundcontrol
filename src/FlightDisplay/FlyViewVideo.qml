@@ -86,7 +86,20 @@ Item {
         anchors.fill: parent
         vehicle: QGroundControl.multiVehicleManager.activeVehicle
     }
-
+    ProximityRadarValues {
+        id:         _centerProximity
+        vehicle:    QGroundControl.multiVehicleManager.activeVehicle
+    }
+    CenterTarget {
+        anchors.centerIn:   parent
+        size:               Math.max(ScreenTools.defaultFontPixelHeight * 3, Math.min(_root.width, _root.height) * 0.15)
+        // visible:            pipState.state === pipState.fullState && QGroundControl.videoManager.isGStreamer
+        visible:            pipState.state === pipState.fullState && QGroundControl.videoManager.isGStreamer && QGroundControl.settingsManager.videoSettings.showCenterTarget.rawValue
+        distance:           _centerProximity.rotationNoneValue
+        distanceText:       _centerProximity.rotationNoneValueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+        warnDistance:       5   // metres
+        alertDistance:      2   // metres
+    }
     ObstacleDistanceOverlayVideo {
         id: obstacleDistance
         showText: pipState.state === pipState.fullState

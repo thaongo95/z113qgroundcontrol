@@ -24,6 +24,8 @@ public:
     DEFINE_SETTINGFACT(udpPort)
     DEFINE_SETTINGFACT(tcpUrl)
     DEFINE_SETTINGFACT(rtspUrl)
+    DEFINE_SETTINGFACT(rtspUrl2)
+    DEFINE_SETTINGFACT(activeCamera)
     DEFINE_SETTINGFACT(aspectRatio)
     DEFINE_SETTINGFACT(videoFit)
     DEFINE_SETTINGFACT(gridLines)
@@ -35,6 +37,7 @@ public:
     DEFINE_SETTINGFACT(streamEnabled)
     DEFINE_SETTINGFACT(disableWhenDisarmed)
     DEFINE_SETTINGFACT(lowLatencyMode)
+    DEFINE_SETTINGFACT(showCenterTarget)
     DEFINE_SETTINGFACT(forceVideoDecoder)
 
     enum VideoDecoderOptions {
@@ -56,6 +59,8 @@ public:
     Q_PROPERTY(QString  disabledVideoSource     READ disabledVideoSource    CONSTANT)
 
     bool     streamConfigured       ();
+    // RTSP url of the camera currently selected with activeCamera (Camera 1 or Camera 2)
+    QString  activeRtspUrl          () { return (activeCamera()->rawValue().toUInt() == 1 ? rtspUrl2() : rtspUrl())->rawValue().toString(); }
     QString  rtspVideoSource        () { return videoSourceRTSP; }
     QString  udp264VideoSource      () { return videoSourceUDPH264; }
     QString  udp265VideoSource      () { return videoSourceUDPH265; }

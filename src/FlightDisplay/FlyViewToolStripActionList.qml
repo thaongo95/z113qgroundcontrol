@@ -24,6 +24,18 @@ ToolStripActionList {
             onTriggered:    mainWindow.showPlanView()
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
+        ToolStripAction {
+            // Switches the displayed video between the Camera 1 and Camera 2 RTSP urls
+            property var    _videoSettings: QGroundControl.settingsManager.videoSettings
+            property int    _activeCamera:  _videoSettings.activeCamera.rawValue
+            property bool   _isRTSP:        _videoSettings.videoSource.rawValue === _videoSettings.rtspVideoSource
+            property bool   _hasTwoUrls:    _videoSettings.rtspUrl.rawValue !== "" && _videoSettings.rtspUrl2.rawValue !== ""
+
+            text:           qsTr("Cam %1").arg(_activeCamera + 1)
+            iconSource:     "/qmlimages/camera_switch.svg"
+            visible:        _isRTSP && _hasTwoUrls && !QGroundControl.videoManager.autoStreamConfigured
+            onTriggered:    _videoSettings.activeCamera.rawValue = (_activeCamera === 0 ? 1 : 0)
+        },
         GuidedActionTakeoff { },
         GuidedActionLand { },
         GuidedActionRTL { },

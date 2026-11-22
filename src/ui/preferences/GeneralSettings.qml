@@ -270,7 +270,8 @@ Rectangle {
 
                                 QGCLabel {
                                     id:         rtspUrlLabel
-                                    text:       qsTr("RTSP URL")
+                                    // text:       qsTr("RTSP URL")
+                                    text:                      qsTr("Camera 1 RTSP URL")
                                     visible:    !_videoAutoStreamConfig && _isRTSP && _videoSettings.rtspUrl.visible
                                 }
                                 FactTextField {
@@ -283,6 +284,35 @@ Rectangle {
                                         SiYi.camera.analyzeIp(text)
                                     }
                                 }
+                                QGCLabel {
+                                    id:         rtspUrl2Label
+                                    // text:       qsTr("RTSP URL")
+                                    text:                      qsTr("Camera 2 RTSP URL")
+                                    visible:    !_videoAutoStreamConfig && _isRTSP && _videoSettings.rtspUrl2.visible
+                                }
+                                FactTextField {
+                                    Layout.preferredWidth:  _comboFieldWidth
+                                    fact:                   _videoSettings.rtspUrl2
+                                    visible:                rtspUrl2Label.visible
+                                    //text: "rtsp://192.168.144.25:8554/main.264"
+
+                                    // onTextChanged: {
+                                    //     SiYi.camera.analyzeIp(text)
+                                    // }
+                                }
+                                QGCLabel {
+                                    id:         activeCameraLabel
+                                    text:       qsTr("Active camera")
+                                    visible:    !_videoAutoStreamConfig && _isRTSP && _videoSettings.activeCamera.visible
+                                }
+                                FactComboBox {
+                                    Layout.preferredWidth:  _comboFieldWidth
+                                    indexModel:             false
+                                    fact:                   _videoSettings.activeCamera
+                                    visible:                activeCameraLabel.visible
+                                }
+
+
 
                                 QGCLabel {
                                     id:         tcpUrlLabel
@@ -353,7 +383,12 @@ Rectangle {
                                     fact:       _videoSettings.lowLatencyMode
                                     visible:    !_videoAutoStreamConfig && _isGst && fact.visible
                                 }
-
+                                Item { width: 1; height: 1}
+                                FactCheckBox {
+                                    text:       qsTr("Show Center Target")
+                                    fact:       _videoSettings.showCenterTarget
+                                    visible:    fact.visible
+                                }
                                 Item { width: 1; height: 1}
                                 FactCheckBox {
                                     text:       qsTr("Auto-Delete Saved Recordings")

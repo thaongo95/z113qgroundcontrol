@@ -26,6 +26,22 @@
     "default":     ""
 },
 {
+    "name":             "rtspUrl2",
+    "shortDesc": "Camera 2 RTSP Url",
+    "longDesc":  "RTSP url of the second camera. Example: rtsp://192.168.144.26:8554/mipi",
+    "type":             "string",
+    "default":     ""
+},
+{
+    "name":             "activeCamera",
+    "shortDesc": "Active Camera",
+    "longDesc":  "Which RTSP camera is displayed (Camera 1 = RTSP Url, Camera 2 = Camera 2 RTSP Url).",
+    "type":             "uint32",
+    "enumStrings":      "Camera 1,Camera 2",
+    "enumValues":       "0,1",
+    "default":     0
+},
+{
     "name":             "tcpUrl",
     "shortDesc": "Video TCP Url",
     "longDesc":  "TCP url address and port to bind to for video stream. Example: 192.168.143.200:3001",
@@ -129,6 +145,14 @@
     "type":             "bool",
     "default":     false
 },
+{
+    "name":             "showCenterTarget",
+    "shortDesc": "Show center target",
+    "longDesc":  "Show the center target and forward distance read-out on the fly view video.",
+    "type":             "bool",
+    "default":     true
+},
+
 {
     "name":             "forceVideoDecoder",
     "shortDesc":        "Force specific category of video decode",
