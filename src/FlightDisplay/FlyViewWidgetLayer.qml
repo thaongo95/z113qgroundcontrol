@@ -420,6 +420,7 @@ Item {
         anchors.topMargin: _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left: parent.left
         anchors.top: parent.top
+        width: ScreenTools.defaultFontPixelWidth * 8
         z: QGroundControl.zOrderWidgets
         maxHeight: parent.height - y - parentToolInsets.bottomEdgeLeftInset - _toolsMargin
         visible: !QGroundControl.videoManager.fullScreen
@@ -460,223 +461,419 @@ Item {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {}
     }
-    MAVLinkInspectorController {
-         id: controller
-    }
-    property var curSystem: controller ? controller.activeSystem : null
-    //property var servoMsg: null
-    property var currentMsg:  curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
-    function findServoMsg() {
-        if (!curSystem || !curSystem.messages)
-            return
 
-        for (var i = 0; i < curSystem.messages.count; ++i) {
-            var msg = curSystem.messages.get(i)
-            //console.log("           " + msg.name)
-            if (msg.name === "SERVO_OUTPUT_RAW") {
-                curSystem.selected = i
+    // MAVLinkInspectorController {
+    //      id: controller
+    // }
+    // property var curSystem: controller ? controller.activeSystem : null
+    // //property var servoMsg: null
+    // property var currentMsg:  curSystem && curSystem.messages.count ? curSystem.messages.get(curSystem.selected) : null
+    // function findServoMsg() {
+    //     if (!curSystem || !curSystem.messages)
+    //         return
 
+    //     for (var i = 0; i < curSystem.messages.count; ++i) {
+    //         var msg = curSystem.messages.get(i)
+    //         //console.log("           " + msg.name)
+    //         if (msg.name === "SERVO_OUTPUT_RAW") {
+    //             curSystem.selected = i
+
+    //             return
+    //         }
+    //     }
+    //     //servoMsg = null
+    // }
+    // function findServoValue(){
+    //     if (!curSystem || !curSystem.messages)
+    //         return
+    //     var servoMsg = curSystem.messages.get(curSystem.selected)
+    //     for (var j = 0; j< servoMsg.fields.count; ++j){
+    //         var field = servoMsg.fields.get(j)
+    //         if (field.name === "servo6_raw"){
+    //             console.log(field.value)
+    //             servo6Value.text = field.value
+    //             var x6 = Number(field.value)
+    //             if ((x6>=1850)&&(x6<=1950)) {servo6Indicator.color = "red"}
+    //             else if ((x6<=1150)&&(x6>=950)) {servo6Indicator.color = "#ba55d3"}
+    //             else {servo6Indicator.color = "green"}
+    //         }
+    //         if (field.name === "servo8_raw"){
+    //             console.log(field.value)
+    //             servo8Value.text = field.value
+    //             var x8 = Number(field.value)
+    //             if ((x8>=1850)&&(x8<=1950)) {servo8Indicator.color = "red"}
+    //             else if ((x8<=1150)&&(x8>=950)) {servo8Indicator.color = "#ba55d3"}
+    //             else {servo8Indicator.color = "green"}
+    //         }
+    //     }
+    // }
+
+    // function findButtonChange() {
+    //     if (!curSystem || !curSystem.messages)
+    //         return
+
+    //     for (var i = 0; i < curSystem.messages.count; ++i) {
+    //         var msg = curSystem.messages.get(i)
+    //         //console.log("           " + msg.name)
+    //         if (msg.name === "BUTTON_CHANGE") {
+    //             curSystem.selected = i
+    //             return
+    //         }
+    //     }
+    // }
+    // function findButtonState(){
+    //     if (!curSystem || !curSystem.messages)
+    //         return
+    //     var buttonMsg = curSystem.messages.get(curSystem.selected)
+    //     for (var j = 0; j< buttonMsg.fields.count; ++j){
+    //         var field = buttonMsg.fields.get(j)
+    //         if (field.name === "state"){
+    //             if (field.value === "3"){
+    //                 button1Value.text = "Close"
+    //                 button2Value.text = "Close"
+    //                 button1Indicator.color = "green"
+    //                 button2Indicator.color = "green"
+    //             }
+    //             else if (field.value === "2"){
+    //                 button1Value.text = "Open"
+    //                 button2Value.text = "Close"
+    //                 button1Indicator.color = "red"
+    //                 button2Indicator.color = "green"
+    //             }
+    //             else if (field.value === "0" ){
+    //                 button1Value.text = "Open"
+    //                 button2Value.text = "Open"
+    //                 button1Indicator.color = "red"
+    //                 button2Indicator.color = "red"
+    //             }
+    //             else if (field.value === "1" ){
+    //                 button1Value.text = "Close"
+    //                 button2Value.text = "Open"
+    //                 button1Indicator.color = "green"
+    //                 button2Indicator.color = "red"
+    //             }
+    //         }
+    //     }
+    // }
+
+    // Timer {
+    //     id: updateTimer
+    //     interval: 200
+    //     running: true
+    //     repeat: true
+    //     onTriggered: {
+    //         findServoMsg()
+    //         findServoValue()
+    //         findButtonChange()
+    //         findButtonState()
+    //     }
+    // }
+    // Rectangle{
+    //     id: servo8Indicator
+    //     anchors.top: parent.top
+    //     anchors.right: parent.right
+    //     anchors.topMargin: 10
+    //     anchors.rightMargin: 20
+    //     width: ScreenTools.defaultFontPixelWidth * 10
+    //     height: ScreenTools.defaultFontPixelWidth * 10
+    //     radius: 10
+    //     color: "green"
+    //     Text{
+    //         anchors.top: parent.top
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.topMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "PULSE 2"
+    //         font.bold: true
+    //     }
+    //     Text{
+    //         id: servo8Value
+    //         anchors.bottom: parent.bottom
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.bottomMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: ""
+    //     }
+    // }
+    // Rectangle{
+    //     id: servo6Indicator
+    //     anchors.top: parent.top
+    //     anchors.right: servo8Indicator.left
+    //     anchors.margins: 10
+    //     width: ScreenTools.defaultFontPixelWidth * 10
+    //     height: ScreenTools.defaultFontPixelWidth * 10
+    //     radius: 10
+    //     color: "green"
+    //     Text{
+    //         anchors.top: parent.top
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.topMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "PULSE 1"
+    //         font.bold: true
+    //     }
+    //     Text{
+    //         id: servo6Value
+    //         anchors.bottom: parent.bottom
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.bottomMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: ""
+    //     }
+    // }
+    // Rectangle{
+    //     id: button2Indicator
+    //     anchors.top: parent.top
+    //     anchors.right: servo6Indicator.left
+    //     anchors.margins: 10
+    //     width: ScreenTools.defaultFontPixelWidth * 10
+    //     height: ScreenTools.defaultFontPixelWidth * 10
+    //     radius: 10
+    //     color: "green"
+    //     Text{
+    //         anchors.top: parent.top
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.topMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "SERVO 2"
+    //         font.bold: true
+    //     }
+    //     Text{
+    //         id: button2Value
+    //         anchors.bottom: parent.bottom
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.bottomMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "Close"
+    //     }
+    // }
+    // Rectangle{
+    //     id: button1Indicator
+    //     anchors.top: parent.top
+    //     anchors.right: button2Indicator.left
+    //     anchors.margins: 10
+    //     width: ScreenTools.defaultFontPixelWidth * 10
+    //     height: ScreenTools.defaultFontPixelWidth * 10
+    //     radius: 10
+    //     color: "green"
+    //     Text{
+    //         anchors.top: parent.top
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.topMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "SERVO 1"
+    //         font.bold: true
+    //     }
+    //     Text{
+    //         id: button1Value
+    //         anchors.bottom: parent.bottom
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         anchors.bottomMargin: 15
+    //         font.pixelSize: 24
+    //         color: "black"
+    //         text: "Close"
+    //     }
+    // }
+    Item {
+        id:                     servoPanel
+        anchors.top:            parent.top
+        anchors.right:          parent.right
+        anchors.topMargin:      10
+        anchors.rightMargin:    4
+        width:                  tileRow.width
+        height:                 tileRow.height
+
+        // ---- state ---------------------------------------------------------------------------
+        property bool   expanded:       true    ///< false = only the handle is shown
+        property int    buttonState:    -1      ///< BUTTON_CHANGE.state (bit 0 = button 1 closed, bit 1 = button 2 closed), -1 = no data
+        property real   pulse1:         NaN     ///< SERVO_OUTPUT_RAW.servo6_raw, NaN = no data
+        property real   pulse2:         NaN     ///< SERVO_OUTPUT_RAW.servo8_raw, NaN = no data
+
+        readonly property real  _tileSize:  ScreenTools.defaultFontPixelWidth * 10
+        readonly property var   _titles:    [ "SERVO 1", "SERVO 2", "PULSE 1", "PULSE 2" ]
+        readonly property color _noData:    "#9e9e9e"
+
+        // ---- data source ---------------------------------------------------------------------
+        MAVLinkInspectorController { id: controller }
+
+        readonly property var curSystem: controller ? controller.activeSystem : null
+
+        // Cached position/last count of each message in the inspector's list
+        property var _servoRef:     ({ name: "SERVO_OUTPUT_RAW", idx: -1, count: -1 })
+        property var _buttonRef:    ({ name: "BUTTON_CHANGE",    idx: -1, count: -1 })
+
+        onCurSystemChanged: {
+            _servoRef.idx = -1;     _servoRef.count = -1
+            _buttonRef.idx = -1;    _buttonRef.count = -1
+            pulse1 = NaN;  pulse2 = NaN;  buttonState = -1
+        }
+
+        // Returns the message if it has received new data since the last call, otherwise null.
+        // The inspector only refreshes a message's field values while that message is selected,
+        // so a message is selected only when there is something new to read.
+        function _fetchIfNew(sys, ref) {
+            var msgs = sys.messages
+            var msg  = (ref.idx >= 0 && ref.idx < msgs.count) ? msgs.get(ref.idx) : null
+
+            if (!msg || msg.name !== ref.name) {
+                // The list is sorted by name, so indexes move when new message types appear
+                msg = null
+                ref.idx = -1
+                for (var i = 0; i < msgs.count; ++i) {
+                    var m = msgs.get(i)
+                    if (m.name === ref.name) {
+                        ref.idx = i
+                        msg = m
+                        break
+                    }
+                }
+            }
+            if (!msg || msg.count === ref.count) {
+                return null
+            }
+            ref.count = msg.count
+            sys.selected = ref.idx
+            return msg
+        }
+
+        function _fieldNumber(msg, fieldName) {
+            var fields = msg.fields
+            for (var j = 0; j < fields.count; ++j) {
+                var f = fields.get(j)
+                if (f.name === fieldName) {
+                    return Number(f.value)
+                }
+            }
+            return NaN
+        }
+
+        function _refresh() {
+            var sys = curSystem
+            if (!sys || !sys.messages) {
                 return
             }
-        }
-        //servoMsg = null
-    }
-    function findServoValue(){
-        if (!curSystem || !curSystem.messages)
-            return
-        var servoMsg = curSystem.messages.get(curSystem.selected)
-        for (var j = 0; j< servoMsg.fields.count; ++j){
-            var field = servoMsg.fields.get(j)
-            if (field.name === "servo6_raw"){
-                console.log(field.value)
-                servo6Value.text = field.value
-                var x6 = Number(field.value)
-                if ((x6>=1850)&&(x6<=1950)) {servo6Indicator.color = "red"}
-                else if ((x6<=1150)&&(x6>=950)) {servo6Indicator.color = "#ba55d3"}
-                else {servo6Indicator.color = "green"}
-            }
-            if (field.name === "servo8_raw"){
-                console.log(field.value)
-                servo8Value.text = field.value
-                var x8 = Number(field.value)
-                if ((x8>=1850)&&(x8<=1950)) {servo8Indicator.color = "red"}
-                else if ((x8<=1150)&&(x8>=950)) {servo8Indicator.color = "#ba55d3"}
-                else {servo8Indicator.color = "green"}
-            }
-        }
-    }
+            var previousSelection = sys.selected
 
-    function findButtonChange() {
-        if (!curSystem || !curSystem.messages)
-            return
+            var servo = _fetchIfNew(sys, _servoRef)
+            if (servo) {
+                pulse1 = _fieldNumber(servo, "servo6_raw")
+                pulse2 = _fieldNumber(servo, "servo8_raw")
+            }
 
-        for (var i = 0; i < curSystem.messages.count; ++i) {
-            var msg = curSystem.messages.get(i)
-            //console.log("           " + msg.name)
-            if (msg.name === "BUTTON_CHANGE") {
-                curSystem.selected = i
-                return
+            var button = _fetchIfNew(sys, _buttonRef)
+            if (button) {
+                var s = _fieldNumber(button, "state")
+                buttonState = isNaN(s) ? -1 : (s & 3)
+            }
+
+            // Give the MAVLink Inspector page its selection back
+            if (sys.selected !== previousSelection) {
+                sys.selected = previousSelection
             }
         }
-    }
-    function findButtonState(){
-        if (!curSystem || !curSystem.messages)
-            return
-        var buttonMsg = curSystem.messages.get(curSystem.selected)
-        for (var j = 0; j< buttonMsg.fields.count; ++j){
-            var field = buttonMsg.fields.get(j)
-            if (field.name === "state"){
-                if (field.value === "3"){
-                    button1Value.text = "Close"
-                    button2Value.text = "Close"
-                    button1Indicator.color = "green"
-                    button2Indicator.color = "green"
-                }
-                else if (field.value === "2"){
-                    button1Value.text = "Open"
-                    button2Value.text = "Close"
-                    button1Indicator.color = "red"
-                    button2Indicator.color = "green"
-                }
-                else if (field.value === "0" ){
-                    button1Value.text = "Open"
-                    button2Value.text = "Open"
-                    button1Indicator.color = "red"
-                    button2Indicator.color = "red"
-                }
-                else if (field.value === "1" ){
-                    button1Value.text = "Close"
-                    button2Value.text = "Open"
-                    button1Indicator.color = "green"
-                    button2Indicator.color = "red"
+
+        // Polls only while the tiles are visible; showing them again refreshes immediately
+        Timer {
+            interval:           200
+            repeat:             true
+            running:            servoPanel.expanded && !!servoPanel.curSystem
+            triggeredOnStart:   true
+            onTriggered:        servoPanel._refresh()
+        }
+
+        // ---- presentation --------------------------------------------------------------------
+        function _pulse(i) { return i === 2 ? pulse1 : pulse2 }
+
+        function tileText(i) {
+            if (i < 2) {
+                return buttonState < 0 ? "--" : ((buttonState & (1 << i)) ? "Close" : "Open")
+            }
+            var p = _pulse(i)
+            return isNaN(p) ? "--" : String(p)
+        }
+
+        function tileColor(i) {
+            if (i < 2) {
+                return buttonState < 0 ? _noData : ((buttonState & (1 << i)) ? "green" : "red")
+            }
+            var p = _pulse(i)
+            if (isNaN(p))               return _noData
+            if (p >= 1850 && p <= 1950) return "red"
+            if (p >= 950  && p <= 1150) return "#ba55d3"
+            return "green"
+        }
+
+        Row {
+            id:         tileRow
+            spacing:    ScreenTools.defaultFontPixelWidth
+
+            Repeater {
+                model: 4
+
+                Rectangle {
+                    width:      servoPanel._tileSize
+                    height:     width
+                    radius:     ScreenTools.defaultFontPixelWidth
+                    visible:    servoPanel.expanded
+                    color:      servoPanel.tileColor(index)
+
+                    Text {
+                        anchors.top:                parent.top
+                        anchors.topMargin:          ScreenTools.defaultFontPixelHeight * 0.6
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        width:                      parent.width - ScreenTools.defaultFontPixelWidth
+                        horizontalAlignment:        Text.AlignHCenter
+                        font.pixelSize:             ScreenTools.defaultFontPixelHeight * 1.3
+                        font.bold:                  true
+                        fontSizeMode:               Text.HorizontalFit
+                        minimumPixelSize:           8
+                        color:                      "black"
+                        text:                       servoPanel._titles[index]
+                    }
+
+                    Text {
+                        anchors.bottom:             parent.bottom
+                        anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight * 0.6
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        width:                      parent.width - ScreenTools.defaultFontPixelWidth
+                        horizontalAlignment:        Text.AlignHCenter
+                        font.pixelSize:             ScreenTools.defaultFontPixelHeight * 1.3
+                        fontSizeMode:               Text.HorizontalFit
+                        minimumPixelSize:           8
+                        color:                      "black"
+                        text:                       servoPanel.tileText(index)
+                    }
                 }
             }
-        }
-    }
 
-    Timer {
-        id: updateTimer
-        interval: 200
-        running: true
-        repeat: true
-        onTriggered: {
-            findServoMsg()
-            findServoValue()
-            findButtonChange()
-            findButtonState()
-        }
-    }
-    Rectangle{
-        id: servo8Indicator
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.topMargin: 10
-        anchors.rightMargin: 20
-        width: 100
-        height: 100
-        radius: 10
-        color: "green"
-        Text{
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "PULSE 2"
-            font.bold: true
-        }
-        Text{
-            id: servo8Value
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: ""
-        }
-    }
-    Rectangle{
-        id: servo6Indicator
-        anchors.top: parent.top
-        anchors.right: servo8Indicator.left
-        anchors.margins: 10
-        width: 100
-        height: 100
-        radius: 10
-        color: "green"
-        Text{
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "PULSE 1"
-            font.bold: true
-        }
-        Text{
-            id: servo6Value
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: ""
-        }
-    }
-    Rectangle{
-        id: button2Indicator
-        anchors.top: parent.top
-        anchors.right: servo6Indicator.left
-        anchors.margins: 10
-        width: 100
-        height: 100
-        radius: 10
-        color: "green"
-        Text{
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "SERVO 2"
-            font.bold: true
-        }
-        Text{
-            id: button2Value
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "Close"
-        }
-    }
-    Rectangle{
-        id: button1Indicator
-        anchors.top: parent.top
-        anchors.right: button2Indicator.left
-        anchors.margins: 10
-        width: 100
-        height: 100
-        radius: 10
-        color: "green"
-        Text{
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "SERVO 1"
-            font.bold: true
-        }
-        Text{
-            id: button1Value
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottomMargin: 15
-            font.pixelSize: 24
-            color: "black"
-            text: "Close"
+            // Hide / show handle, stays on the right edge in both states
+            Rectangle {
+                id:         toggleHandle
+                width:      servoPanel._tileSize * 0.45
+                height:     servoPanel._tileSize
+                radius:     ScreenTools.defaultFontPixelWidth
+                color:      "#99000000"
+
+                Text {
+                    anchors.centerIn:   parent
+                    text:               servoPanel.expanded ? "\u203A" : "\u2039"
+                    color:              "white"
+                    font.pixelSize:     ScreenTools.defaultFontPixelHeight * 2
+                    font.bold:          true
+                }
+
+                MouseArea {
+                    anchors.fill:   parent
+                    onClicked:      servoPanel.expanded = !servoPanel.expanded
+                }
+            }
         }
     }
 

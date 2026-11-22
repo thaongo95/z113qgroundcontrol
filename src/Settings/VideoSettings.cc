@@ -112,6 +112,7 @@ DECLARE_SETTINGSFACT(VideoSettings, rtspTimeout)
 DECLARE_SETTINGSFACT(VideoSettings, streamEnabled)
 DECLARE_SETTINGSFACT(VideoSettings, disableWhenDisarmed)
 DECLARE_SETTINGSFACT(VideoSettings, lowLatencyMode)
+DECLARE_SETTINGSFACT(VideoSettings, showCenterTarget)
 
 DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, videoSource)
 {
@@ -170,6 +171,25 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, rtspUrl)
     return _rtspUrlFact;
 }
 
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, rtspUrl2)
+{
+    if (!_rtspUrl2Fact) {
+        _rtspUrl2Fact = _createSettingsFact(rtspUrl2Name);
+        connect(_rtspUrl2Fact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _rtspUrl2Fact;
+}
+
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, activeCamera)
+{
+    if (!_activeCameraFact) {
+        _activeCameraFact = _createSettingsFact(activeCameraName);
+        connect(_activeCameraFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _activeCameraFact;
+}
+
+
 DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, tcpUrl)
 {
     if (!_tcpUrlFact) {
@@ -201,8 +221,10 @@ bool VideoSettings::streamConfigured(void)
     }
     //-- If RTSP, check for URL
     if(vSource == videoSourceRTSP) {
-        qCDebug(VideoManagerLog) << "Testing configuration for RTSP Stream:" << rtspUrl()->rawValue().toString();
-        return !rtspUrl()->rawValue().toString().isEmpty();
+        // qCDebug(VideoManagerLog) << "Testing configuration for RTSP Stream:" << rtspUrl()->rawValue().toString();
+        // return !rtspUrl()->rawValue().toString().isEmpty();
+        qCDebug(VideoManagerLog) << "Testing configuration for RTSP Stream:" << activeRtspUrl();
+        return !activeRtspUrl().isEmpty();
     }
     //-- If TCP, check for URL
     if(vSource == videoSourceTCP) {

@@ -64,6 +64,9 @@
         <file alias="camera.svg">resources/camera.svg</file>
         <file alias="camera_photo.svg">src/Camera/images/camera_photo.svg</file>
         <file alias="camera_video.svg">src/Camera/images/camera_video.svg</file>
+        <file alias="camera_switch.svg">src/Camera/images/camera_switch.svg</file>
+        <file alias="center_target.svg">src/Camera/images/center_target.svg</file>
+        <file alias="center_target_mono.svg">src/Camera/images/center_target_mono.svg</file>
         <file alias="CameraComponentIcon.png">src/AutoPilotPlugins/Common/Images/CameraComponentIcon.png</file>
         <file alias="CameraIcon.svg">src/ui/toolbar/Images/CameraIcon.svg</file>
         <file alias="CameraTrigger.svg">src/AutoPilotPlugins/PX4/Images/CameraTrigger.svg</file>

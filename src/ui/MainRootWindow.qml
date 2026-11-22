@@ -338,7 +338,7 @@ ApplicationWindow {
     /// Toolbar
     header: MainToolBar {
         id:         toolbar
-        height:     planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight
+        height:     planView.visible ? ScreenTools.toolbarHeight*1.2 : ScreenTools.toolbarHeight*0.8
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
